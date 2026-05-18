@@ -10,11 +10,30 @@ export function Studios() {
   const navigate = useNavigate()
   const { haptic } = useTelegram()
   const touchStartX = useRef<number>(0)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  // Lock body scroll when sheet open
   useEffect(() => {
     document.body.style.overflow = selected ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [selected])
+
+  // Auto-advance photos every 3s
+  useEffect(() => {
+    if (!selected) return
+    intervalRef.current = setInterval(() => {
+      setPhotoIndex(i => (i + 1) % selected.images.length)
+    }, 3000)
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+  }, [selected])
+
+  const resetInterval = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    if (!selected) return
+    intervalRef.current = setInterval(() => {
+      setPhotoIndex(i => (i + 1) % selected.images.length)
+    }, 3000)
+  }
 
   const openStudio = (studio: Studio) => {
     haptic?.impactOccurred('light')
@@ -22,26 +41,30 @@ export function Studios() {
     setPhotoIndex(0)
   }
 
-  const close = () => setSelected(null)
-
-  const prevPhoto = () => {
-    if (!selected) return
-    setPhotoIndex(i => (i - 1 + selected.images.length) % selected.images.length)
+  const close = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    setSelected(null)
   }
 
-  const nextPhoto = () => {
-    if (!selected) return
-    setPhotoIndex(i => (i + 1) % selected.images.length)
+  const goTo = (i: number) => {
+    setPhotoIndex(i)
+    resetInterval()
   }
 
-  const onPhotoTouchStart = (e: React.TouchEvent) => {
+  const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
   }
 
-  const onPhotoTouchEnd = (e: React.TouchEvent) => {
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!selected) return
     const diff = touchStartX.current - e.changedTouches[0].clientX
     if (Math.abs(diff) > 40) {
-      diff > 0 ? nextPhoto() : prevPhoto()
+      if (diff > 0) {
+        setPhotoIndex(i => (i + 1) % selected.images.length)
+      } else {
+        setPhotoIndex(i => (i - 1 + selected.images.length) % selected.images.length)
+      }
+      resetInterval()
     }
   }
 
@@ -92,26 +115,26 @@ export function Studios() {
         ))}
       </div>
 
-      {/* Detail sheet */}
       {selected && (
         <>
-          {/* Full-screen backdrop */}
+          {/* Backdrop — z-40, below nav (z-50) */}
           <div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
             onClick={close}
             onTouchMove={e => e.preventDefault()}
           />
 
-          {/* Sheet positioned above nav */}
+          {/* Sheet — z-40, bottom:0, nav sits on top */}
           <div
-            className="fixed left-0 right-0 z-50 dark:bg-[#111] bg-white rounded-t-3xl flex flex-col animate-slide-up"
-            style={{ bottom: 80, maxHeight: 'calc(90vh - 80px)' }}
+            className="fixed left-0 right-0 bottom-0 z-40 dark:bg-[#111] bg-white rounded-t-3xl flex flex-col animate-slide-up"
+            style={{ maxHeight: '90vh' }}
           >
             {/* Photo gallery */}
             <div
-              className="relative h-52 flex-shrink-0 rounded-t-3xl overflow-hidden"
-              onTouchStart={onPhotoTouchStart}
-              onTouchEnd={onPhotoTouchEnd}
+              className="relative flex-shrink-0 rounded-t-3xl overflow-hidden"
+              style={{ height: '52vw', minHeight: 180, maxHeight: 240 }}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
             >
               {selected.images.map((src, i) => (
                 <img key={src} src={src} alt={selected.name}
@@ -121,27 +144,31 @@ export function Studios() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
               <button onClick={close}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center">
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center z-10">
                 <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
               {selected.images.length > 1 && (
-                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
                   {selected.images.map((_, i) => (
-                    <button key={i} onClick={() => setPhotoIndex(i)}
-                      className={`w-1.5 h-1.5 rounded-full transition-colors ${i === photoIndex ? 'bg-white' : 'bg-white/40'}`}
+                    <button key={i} onClick={() => goTo(i)}
+                      className={`transition-all duration-300 rounded-full ${i === photoIndex ? 'w-4 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40'}`}
                     />
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Scrollable info */}
+            {/* Scrollable content — pb accounts for nav bar */}
             <div
               className="flex-1 min-h-0 overflow-y-auto p-5"
-              style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+              style={{
+                overscrollBehavior: 'contain',
+                WebkitOverflowScrolling: 'touch',
+                paddingBottom: 'calc(80px + env(safe-area-inset-bottom))',
+              } as React.CSSProperties}
             >
               <div className="flex items-center gap-2 mb-1">
                 <h2 className="text-xl font-bold dark:text-white text-gray-900">{selected.name}</h2>
