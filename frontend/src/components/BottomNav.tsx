@@ -9,7 +9,7 @@ const baseTabs = [
 ]
 
 export function BottomNav() {
-  const { isAdmin } = useAppContext()
+  const { isAdmin, pendingCount } = useAppContext()
   const tabs = isAdmin
     ? [...baseTabs, { to: '/admin', icon: AdminIcon, label: 'Админ' }]
     : baseTabs
@@ -31,8 +31,22 @@ export function BottomNav() {
             }`
           }
         >
-          <Icon size={22} />
-          <span className="text-[10px] font-medium">{label}</span>
+          {({ isActive }) => (
+            <>
+              <div className="relative">
+                <Icon size={22} />
+                {to === '/admin' && pendingCount > 0 && (
+                  <span className={`absolute -top-1 -right-1.5 min-w-[16px] h-4 px-0.5
+                    rounded-full bg-red-500 text-white text-[9px] font-bold
+                    flex items-center justify-center leading-none
+                    ${isActive ? '' : ''}`}>
+                    {pendingCount > 9 ? '9+' : pendingCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-medium">{label}</span>
+            </>
+          )}
         </NavLink>
       ))}
     </nav>

@@ -7,7 +7,7 @@ import { Studios } from './pages/Studios'
 import { Booking } from './pages/Booking'
 import { Profile } from './pages/Profile'
 import { Admin } from './pages/Admin'
-import { upsertUser } from './api'
+import { upsertUser, getAdminBookings } from './api'
 
 const ADMIN_IDS = (import.meta.env.VITE_ADMIN_IDS ?? '')
   .split(',')
@@ -17,16 +17,26 @@ const ADMIN_IDS = (import.meta.env.VITE_ADMIN_IDS ?? '')
 interface AppCtx {
   telegramId: number | null
   isAdmin: boolean
+  pendingCount: number
+  refreshPending: () => void
 }
 
-const AppContext = createContext<AppCtx>({ telegramId: null, isAdmin: false })
+const AppContext = createContext<AppCtx>({ telegramId: null, isAdmin: false, pendingCount: 0, refreshPending: () => {} })
 export const useAppContext = () => useContext(AppContext)
 
 export function App() {
   const { theme, user } = useTelegram()
   const [telegramId, setTelegramId] = useState<number | null>(null)
+  const [pendingCount, setPendingCount] = useState(0)
 
   const isAdmin = telegramId !== null && ADMIN_IDS.includes(telegramId)
+
+  const refreshPending = () => {
+    if (!isAdmin) return
+    getAdminBookings()
+      .then((data: any[]) => setPendingCount(data.filter((b: any) => b.status === 'pending').length))
+      .catch(() => {})
+  }
 
   useEffect(() => {
     const root = document.documentElement
@@ -46,8 +56,12 @@ export function App() {
       .catch(() => setTelegramId(user.id))
   }, [user])
 
+  useEffect(() => {
+    if (isAdmin) refreshPending()
+  }, [isAdmin])
+
   return (
-    <AppContext.Provider value={{ telegramId, isAdmin }}>
+    <AppContext.Provider value={{ telegramId, isAdmin, pendingCount, refreshPending }}>
       <div className="min-h-screen dark:bg-[#0d0d0d] bg-[#f5f5f5] dark:text-white text-gray-900 transition-colors">
         <Routes>
           <Route path="/" element={<Home />} />
