@@ -19,7 +19,8 @@ class UserOut(BaseModel):
     username: Optional[str] = None
     created_at: datetime
 
-    model_config = {"from_attributes": True}
+    class Config:
+        orm_mode = True
 
 
 class BookingCreate(BaseModel):
@@ -47,7 +48,8 @@ class BookingOut(BaseModel):
     status: BookingStatus
     created_at: datetime
 
-    model_config = {"from_attributes": True}
+    class Config:
+        orm_mode = True
 
 
 class TelegramAuth(BaseModel):
