@@ -4,6 +4,8 @@ import { STUDIOS } from '../data'
 import { useTelegram } from '../hooks/useTelegram'
 import type { Studio } from '../types'
 
+const NAV_H = 80
+
 export function Studios() {
   const [selected, setSelected] = useState<Studio | null>(null)
   const [photoIndex, setPhotoIndex] = useState(0)
@@ -11,11 +13,7 @@ export function Studios() {
   const { haptic } = useTelegram()
 
   useEffect(() => {
-    if (selected) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = selected ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [selected])
 
@@ -39,9 +37,7 @@ export function Studios() {
           <button
             key={studio.id}
             onClick={() => openStudio(studio)}
-            className="w-full text-left rounded-3xl overflow-hidden
-              dark:bg-white/5 bg-black/5
-              active:scale-[0.98] transition-transform"
+            className="w-full text-left rounded-3xl overflow-hidden dark:bg-white/5 bg-black/5 active:scale-[0.98] transition-transform"
           >
             <div className="relative h-48">
               <img src={studio.images[0]} alt={studio.name} className="w-full h-full object-cover" />
@@ -78,15 +74,21 @@ export function Studios() {
 
       {/* Detail sheet */}
       {selected && (
-        <div className="fixed inset-0 z-50 flex flex-col animate-slide-up">
+        <div className="fixed inset-0 z-50 animate-slide-up" style={{ bottom: NAV_H }}>
+          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={close}
             onTouchMove={e => e.preventDefault()}
           />
-          <div className="relative mt-auto dark:bg-[#111] bg-white rounded-t-3xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(90vh - 80px)' }}>
-            {/* Photo gallery */}
-            <div className="relative h-64 flex-shrink-0">
+
+          {/* Sheet */}
+          <div
+            className="absolute bottom-0 left-0 right-0 dark:bg-[#111] bg-white rounded-t-3xl flex flex-col"
+            style={{ maxHeight: '88%' }}
+          >
+            {/* Photo */}
+            <div className="relative h-52 flex-shrink-0 rounded-t-3xl overflow-hidden">
               {selected.images.map((src, i) => (
                 <img key={src} src={src} alt={selected.name}
                   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${i === photoIndex ? 'opacity-100' : 'opacity-0'}`}
@@ -94,7 +96,6 @@ export function Studios() {
               ))}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
-              {/* Close */}
               <button onClick={close}
                 className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center">
                 <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -102,8 +103,7 @@ export function Studios() {
                 </svg>
               </button>
 
-              {/* Photo dots */}
-              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
+              <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
                 {selected.images.map((_, i) => (
                   <button key={i} onClick={() => setPhotoIndex(i)}
                     className={`w-1.5 h-1.5 rounded-full transition-colors ${i === photoIndex ? 'bg-white' : 'bg-white/40'}`}
@@ -112,8 +112,11 @@ export function Studios() {
               </div>
             </div>
 
-            {/* Info */}
-            <div className="flex-1 min-h-0 p-5 pb-8 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {/* Scrollable info */}
+            <div
+              className="flex-1 min-h-0 overflow-y-auto p-5"
+              style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+            >
               <div className="flex items-center gap-2 mb-1">
                 <h2 className="text-xl font-bold dark:text-white text-gray-900">{selected.name}</h2>
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: selected.color }} />
