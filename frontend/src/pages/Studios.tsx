@@ -84,7 +84,7 @@ export function Studios() {
             onClick={close}
             onTouchMove={e => e.preventDefault()}
           />
-          <div className="relative mt-auto dark:bg-[#111] bg-white rounded-t-3xl overflow-hidden max-h-[90vh] flex flex-col">
+          <div className="relative mt-auto dark:bg-[#111] bg-white rounded-t-3xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(90vh - 80px)' }}>
             {/* Photo gallery */}
             <div className="relative h-64 flex-shrink-0">
               {selected.images.map((src, i) => (
@@ -113,7 +113,7 @@ export function Studios() {
             </div>
 
             {/* Info */}
-            <div className="flex-1 min-h-0 p-5 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <div className="flex-1 min-h-0 p-5 pb-8 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
               <div className="flex items-center gap-2 mb-1">
                 <h2 className="text-xl font-bold dark:text-white text-gray-900">{selected.name}</h2>
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: selected.color }} />
