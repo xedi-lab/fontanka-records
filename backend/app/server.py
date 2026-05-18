@@ -166,7 +166,7 @@ def confirm_booking(booking_id):
             f"🏠 Студия {b['studio_id']} · {b['booking_date']} в {b['booking_time']}\n"
             f"🎛️ {b['service_title']}\n"
             f"💳 Предоплата: <b>{int(b['prepay_amount']):,} ₽</b>\n\n"
-            f"Ждём вас на Гороховой 70 🎙️"
+            f"Ждём вас в Фонтанка Рэкордс 🎙️"
         )
     return jsonify(dict(db.execute("SELECT * FROM bookings WHERE id=?", (booking_id,)).fetchone()))
 
