@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { STUDIOS } from '../data'
 import { useTelegram } from '../hooks/useTelegram'
@@ -9,6 +9,15 @@ export function Studios() {
   const [photoIndex, setPhotoIndex] = useState(0)
   const navigate = useNavigate()
   const { haptic } = useTelegram()
+
+  useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [selected])
 
   const openStudio = (studio: Studio) => {
     haptic?.impactOccurred('light')
@@ -70,7 +79,11 @@ export function Studios() {
       {/* Detail sheet */}
       {selected && (
         <div className="fixed inset-0 z-50 flex flex-col animate-slide-up">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={close} />
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={close}
+            onTouchMove={e => e.preventDefault()}
+          />
           <div className="relative mt-auto dark:bg-[#111] bg-white rounded-t-3xl overflow-hidden max-h-[90vh] flex flex-col">
             {/* Photo gallery */}
             <div className="relative h-64 flex-shrink-0">
@@ -100,7 +113,7 @@ export function Studios() {
             </div>
 
             {/* Info */}
-            <div className="p-5 overflow-y-auto">
+            <div className="p-5 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
               <div className="flex items-center gap-2 mb-1">
                 <h2 className="text-xl font-bold dark:text-white text-gray-900">{selected.name}</h2>
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: selected.color }} />

@@ -65,7 +65,7 @@ export const SERVICES: Service[] = [
 
 export const SERVICE_CATEGORIES = [
   { id: 'record', label: 'Запись', icon: '🎤' },
-  { id: 'studio', label: 'Продакшен', icon: '🎛️' },
+  { id: 'studio', label: 'Продакшн', icon: '🎛️' },
   { id: 'voice', label: 'Голос', icon: '🎵' },
   { id: 'rent', label: 'Аренда', icon: '🏠' },
   { id: 'package', label: 'Пакеты', icon: '📦' },
