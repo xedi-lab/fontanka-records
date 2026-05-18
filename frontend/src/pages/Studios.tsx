@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { STUDIOS } from '../data'
 import { useTelegram } from '../hooks/useTelegram'
 import type { Studio } from '../types'
-
-const NAV_H = 80
 
 export function Studios() {
   const [selected, setSelected] = useState<Studio | null>(null)
   const [photoIndex, setPhotoIndex] = useState(0)
   const navigate = useNavigate()
   const { haptic } = useTelegram()
+  const touchStartX = useRef<number>(0)
 
   useEffect(() => {
     document.body.style.overflow = selected ? 'hidden' : ''
@@ -24,6 +23,27 @@ export function Studios() {
   }
 
   const close = () => setSelected(null)
+
+  const prevPhoto = () => {
+    if (!selected) return
+    setPhotoIndex(i => (i - 1 + selected.images.length) % selected.images.length)
+  }
+
+  const nextPhoto = () => {
+    if (!selected) return
+    setPhotoIndex(i => (i + 1) % selected.images.length)
+  }
+
+  const onPhotoTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const onPhotoTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 40) {
+      diff > 0 ? nextPhoto() : prevPhoto()
+    }
+  }
 
   return (
     <div className="pb-nav animate-fade-in">
@@ -74,21 +94,25 @@ export function Studios() {
 
       {/* Detail sheet */}
       {selected && (
-        <div className="fixed inset-0 z-50 animate-slide-up" style={{ bottom: NAV_H }}>
-          {/* Backdrop */}
+        <>
+          {/* Full-screen backdrop */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
             onClick={close}
             onTouchMove={e => e.preventDefault()}
           />
 
-          {/* Sheet */}
+          {/* Sheet positioned above nav */}
           <div
-            className="absolute bottom-0 left-0 right-0 dark:bg-[#111] bg-white rounded-t-3xl flex flex-col"
-            style={{ maxHeight: '88%' }}
+            className="fixed left-0 right-0 z-50 dark:bg-[#111] bg-white rounded-t-3xl flex flex-col animate-slide-up"
+            style={{ bottom: 80, maxHeight: 'calc(90vh - 80px)' }}
           >
-            {/* Photo */}
-            <div className="relative h-52 flex-shrink-0 rounded-t-3xl overflow-hidden">
+            {/* Photo gallery */}
+            <div
+              className="relative h-52 flex-shrink-0 rounded-t-3xl overflow-hidden"
+              onTouchStart={onPhotoTouchStart}
+              onTouchEnd={onPhotoTouchEnd}
+            >
               {selected.images.map((src, i) => (
                 <img key={src} src={src} alt={selected.name}
                   className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${i === photoIndex ? 'opacity-100' : 'opacity-0'}`}
@@ -103,13 +127,15 @@ export function Studios() {
                 </svg>
               </button>
 
-              <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-                {selected.images.map((_, i) => (
-                  <button key={i} onClick={() => setPhotoIndex(i)}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${i === photoIndex ? 'bg-white' : 'bg-white/40'}`}
-                  />
-                ))}
-              </div>
+              {selected.images.length > 1 && (
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
+                  {selected.images.map((_, i) => (
+                    <button key={i} onClick={() => setPhotoIndex(i)}
+                      className={`w-1.5 h-1.5 rounded-full transition-colors ${i === photoIndex ? 'bg-white' : 'bg-white/40'}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Scrollable info */}
@@ -143,7 +169,7 @@ export function Studios() {
               </button>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )
