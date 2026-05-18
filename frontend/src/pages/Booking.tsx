@@ -88,7 +88,17 @@ export function Booking() {
     try {
       if (telegramId) {
         const booking = await createBooking(telegramId, payload)
-        store.addBooking({ ...booking, date: booking.booking_date, time: booking.booking_time, totalPrice: booking.total_price, prepayAmount: booking.prepay_amount, createdAt: booking.created_at })
+        store.addBooking({
+          id: String(booking.id),
+          studioId: booking.studio_id,
+          serviceId: booking.service_id,
+          date: booking.booking_date,
+          time: booking.booking_time,
+          totalPrice: booking.total_price,
+          prepayAmount: booking.prepay_amount,
+          status: booking.status,
+          createdAt: booking.created_at,
+        })
       } else {
         // offline fallback
         store.addBooking({

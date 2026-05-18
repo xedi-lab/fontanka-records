@@ -138,9 +138,11 @@ function BookingCard({ booking, onCancel }: { booking: Booking; onCancel?: (id: 
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="font-semibold dark:text-white text-gray-900 text-sm">
-            {service?.title ?? booking.serviceId} · {service?.duration ?? ''}ч
+            {service?.title ?? booking.serviceId ?? '—'} · {service?.duration ?? ''}ч
           </div>
-          <div className="text-xs dark:text-white/50 text-gray-500 mt-0.5">{studio?.name ?? `Студия ${booking.studioId}`}</div>
+          <div className="text-xs dark:text-white/50 text-gray-500 mt-0.5">
+            {studio?.name ?? (booking.studioId ? `Студия ${booking.studioId}` : '—')}
+          </div>
         </div>
         <span className={`text-xs font-medium ${status.color}`}>{status.label}</span>
       </div>
