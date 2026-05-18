@@ -38,6 +38,17 @@ export async function cancelBooking(bookingId: number) {
   return data
 }
 
+export async function getAdminBookings(date?: string) {
+  const params = date ? `?date=${date}` : ''
+  const { data } = await api.get(`/api/bookings/admin/all${params}`)
+  return data
+}
+
+export async function confirmBooking(bookingId: number) {
+  const { data } = await api.patch(`/api/bookings/${bookingId}/confirm`)
+  return data
+}
+
 export async function getAvailableSlots(studioId: string, date: string) {
   const { data } = await api.get(`/api/slots/${studioId}/${date}`)
   return data.slots as { time: string; available: boolean }[]

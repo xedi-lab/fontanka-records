@@ -149,6 +149,28 @@ def get_bookings(telegram_id):
     return jsonify([dict(r) for r in rows])
 
 
+@app.patch("/api/bookings/<int:booking_id>/confirm")
+def confirm_booking(booking_id):
+    db = get_db()
+    b = db.execute("SELECT * FROM bookings WHERE id=?", (booking_id,)).fetchone()
+    if not b:
+        abort(404)
+    if b["status"] != "pending":
+        abort(400, "Cannot confirm")
+    db.execute("UPDATE bookings SET status='confirmed' WHERE id=?", (booking_id,))
+    db.commit()
+    user = db.execute("SELECT * FROM users WHERE id=?", (b["user_id"],)).fetchone()
+    if user:
+        tg_send(user["telegram_id"],
+            f"✅ <b>Ваша запись подтверждена!</b>\n\n"
+            f"🏠 Студия {b['studio_id']} · {b['booking_date']} в {b['booking_time']}\n"
+            f"🎛️ {b['service_title']}\n"
+            f"💳 Предоплата: <b>{int(b['prepay_amount']):,} ₽</b>\n\n"
+            f"Ждём вас на Гороховой 70 🎙️"
+        )
+    return jsonify(dict(db.execute("SELECT * FROM bookings WHERE id=?", (booking_id,)).fetchone()))
+
+
 @app.patch("/api/bookings/<int:booking_id>/cancel")
 def cancel_booking(booking_id):
     db = get_db()

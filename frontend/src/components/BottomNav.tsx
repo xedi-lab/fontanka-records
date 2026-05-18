@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
+import { useAppContext } from '../App'
 
-const tabs = [
+const baseTabs = [
   { to: '/', icon: HomeIcon, label: 'Главная' },
   { to: '/studios', icon: StudiosIcon, label: 'Залы' },
   { to: '/booking', icon: BookIcon, label: 'Запись' },
@@ -8,6 +9,11 @@ const tabs = [
 ]
 
 export function BottomNav() {
+  const { isAdmin } = useAppContext()
+  const tabs = isAdmin
+    ? [...baseTabs, { to: '/admin', icon: AdminIcon, label: 'Админ' }]
+    : baseTabs
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 bottom-nav-height z-50 border-t
       dark:bg-[#111] dark:border-white/10 bg-white border-black/10
@@ -71,6 +77,14 @@ function ProfileIcon({ size }: { size: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
       <circle cx="12" cy="7" r="4"/>
+    </svg>
+  )
+}
+
+function AdminIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
     </svg>
   )
 }
