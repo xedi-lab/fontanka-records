@@ -330,8 +330,8 @@ export function Booking() {
           <button
             onClick={confirm}
             disabled={submitting}
-            className={`w-full py-4 rounded-2xl font-bold text-white text-base transition-all
-              ${submitting ? 'opacity-60' : 'bg-white text-black active:scale-95 shadow-lg shadow-white/20'}`}
+            className={`w-full py-4 rounded-2xl font-bold text-base transition-all
+              ${submitting ? 'opacity-60 bg-white/20 text-white/40' : 'bg-white text-black active:scale-95 shadow-lg shadow-white/20'}`}
           >
             {submitting ? 'Отправляем...' : 'Подтвердить запись'}
           </button>
@@ -344,7 +344,7 @@ export function Booking() {
           <button
             onClick={next}
             disabled={!canProceed()}
-            className={`w-full py-4 rounded-2xl font-bold text-white text-base transition-all
+            className={`w-full py-4 rounded-2xl font-bold text-base transition-all
               ${canProceed()
                 ? 'bg-white text-black active:scale-95 shadow-lg shadow-white/20'
                 : 'bg-white/20 text-white/40 cursor-not-allowed'}`}
