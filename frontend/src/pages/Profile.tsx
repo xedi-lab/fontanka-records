@@ -74,7 +74,7 @@ export function Profile() {
         {user?.photo_url
           ? <img src={user.photo_url} alt="avatar" className="w-14 h-14 rounded-full object-cover" />
           : (
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-white/30 to-white/10 flex items-center justify-center border border-white/20">
               <span className="text-white font-bold text-xl">{user ? user.first_name[0] : '?'}</span>
             </div>
           )
@@ -183,7 +183,7 @@ function EmptyState({ emoji, text, action, onAction }: { emoji: string; text: st
     <div className="py-8 text-center">
       <div className="text-4xl mb-2">{emoji}</div>
       <p className="text-sm dark:text-white/40 text-gray-400 mb-4">{text}</p>
-      <button onClick={onAction} className="px-6 py-2.5 rounded-xl bg-purple-600 text-white text-sm font-semibold active:scale-95 transition-transform">
+      <button onClick={onAction} className="px-6 py-2.5 rounded-xl bg-white text-black text-sm font-semibold active:scale-95 transition-transform shadow-lg shadow-white/20">
         {action}
       </button>
     </div>

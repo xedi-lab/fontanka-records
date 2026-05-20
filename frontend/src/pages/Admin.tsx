@@ -103,7 +103,7 @@ export function Admin() {
               onClick={() => setFilter(f.id)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 filter === f.id
-                  ? 'bg-purple-600 text-white'
+                  ? 'bg-white text-black'
                   : 'dark:bg-white/10 bg-black/10 dark:text-white/60 text-gray-500'
               }`}
             >

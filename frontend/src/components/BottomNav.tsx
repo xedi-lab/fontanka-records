@@ -26,7 +26,7 @@ export function BottomNav() {
           className={({ isActive }) =>
             `flex-1 flex flex-col items-center gap-1 py-1 transition-colors
             ${isActive
-              ? 'text-purple-500'
+              ? 'text-white'
               : 'dark:text-white/40 text-black/40 hover:dark:text-white/70 hover:text-black/70'
             }`
           }

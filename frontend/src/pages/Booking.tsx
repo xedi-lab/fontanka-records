@@ -132,7 +132,7 @@ export function Booking() {
         </p>
         <button
           onClick={() => { setSuccess(false); setStep('service'); navigate('/profile') }}
-          className="w-full max-w-xs py-4 rounded-2xl font-bold text-white bg-purple-600 active:scale-95 transition-transform"
+          className="w-full max-w-xs py-4 rounded-2xl font-bold text-black bg-white active:scale-95 transition-transform shadow-lg shadow-white/20"
         >
           Мои записи
         </button>
@@ -158,7 +158,7 @@ export function Booking() {
       {/* Progress */}
       <div className="flex gap-1 px-4 mb-5">
         {STEPS.map((s, i) => (
-          <div key={s} className={`h-1 flex-1 rounded-full transition-colors ${i <= stepIndex ? 'bg-purple-500' : 'dark:bg-white/10 bg-black/10'}`} />
+          <div key={s} className={`h-1 flex-1 rounded-full transition-colors ${i <= stepIndex ? 'bg-white' : 'dark:bg-white/15 bg-black/10'}`} />
         ))}
       </div>
 
@@ -172,7 +172,7 @@ export function Booking() {
                 onClick={() => { haptic?.selectionChanged(); setActiveCategory(cat.id as ServiceCategory) }}
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-colors
                   ${activeCategory === cat.id
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-white text-black'
                     : 'dark:bg-white/10 bg-black/10 dark:text-white/70 text-gray-600'}`}
               >
                 <span>{cat.icon}</span>
@@ -240,7 +240,7 @@ export function Booking() {
                     key={date.toISOString()}
                     onClick={() => { haptic?.selectionChanged(); setLocalDate(date) }}
                     className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl transition-colors min-w-[52px]
-                      ${isSelected ? 'bg-purple-600 text-white' : 'dark:bg-white/10 bg-black/10 dark:text-white text-gray-900'}`}
+                      ${isSelected ? 'bg-white text-black' : 'dark:bg-white/10 bg-black/10 dark:text-white text-gray-900'}`}
                   >
                     <span className="text-[10px] font-medium uppercase opacity-70">
                       {isToday ? 'сег' : format(date, 'EEE', { locale: ru }).slice(0, 3)}
@@ -266,7 +266,7 @@ export function Booking() {
                     className={`py-2.5 rounded-xl text-sm font-semibold transition-colors
                       ${!slot.available ? 'opacity-30 cursor-not-allowed dark:bg-white/5 bg-black/5 dark:text-white text-gray-900' :
                         localTime === slot.time
-                          ? 'bg-purple-600 text-white'
+                          ? 'bg-white text-black'
                           : 'dark:bg-white/10 bg-black/10 dark:text-white text-gray-900'}`}
                   >
                     {slot.time}
@@ -281,7 +281,7 @@ export function Booking() {
                     key={t}
                     onClick={() => { haptic?.selectionChanged(); setLocalTime(t) }}
                     className={`py-2.5 rounded-xl text-sm font-semibold transition-colors
-                      ${localTime === t ? 'bg-purple-600 text-white' : 'dark:bg-white/10 bg-black/10 dark:text-white text-gray-900'}`}
+                      ${localTime === t ? 'bg-white text-black' : 'dark:bg-white/10 bg-black/10 dark:text-white text-gray-900'}`}
                   >
                     {t}
                   </button>
@@ -331,7 +331,7 @@ export function Booking() {
             onClick={confirm}
             disabled={submitting}
             className={`w-full py-4 rounded-2xl font-bold text-white text-base transition-all
-              ${submitting ? 'opacity-60' : 'bg-gradient-to-r from-purple-600 to-purple-500 active:scale-95 shadow-lg shadow-purple-500/25'}`}
+              ${submitting ? 'opacity-60' : 'bg-white text-black active:scale-95 shadow-lg shadow-white/20'}`}
           >
             {submitting ? 'Отправляем...' : 'Подтвердить запись'}
           </button>
@@ -346,8 +346,8 @@ export function Booking() {
             disabled={!canProceed()}
             className={`w-full py-4 rounded-2xl font-bold text-white text-base transition-all
               ${canProceed()
-                ? 'bg-purple-600 active:scale-95 shadow-lg shadow-purple-500/20'
-                : 'bg-purple-600/30 cursor-not-allowed'}`}
+                ? 'bg-white text-black active:scale-95 shadow-lg shadow-white/20'
+                : 'bg-white/20 text-white/40 cursor-not-allowed'}`}
           >
             Далее
           </button>
@@ -362,7 +362,7 @@ function ServiceCard({ service, selected, onSelect }: { service: Service; select
     <button
       onClick={onSelect}
       className={`w-full text-left p-4 rounded-2xl transition-all active:scale-[0.98]
-        ${selected ? 'bg-purple-600/15 ring-1 ring-purple-500' : 'dark:bg-white/5 bg-black/5'}`}
+        ${selected ? 'bg-white/10 ring-1 ring-white/40' : 'dark:bg-white/5 bg-black/5'}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
@@ -378,8 +378,8 @@ function ServiceCard({ service, selected, onSelect }: { service: Service; select
           <div className="text-[10px] dark:text-white/40 text-gray-400">50% предоплата</div>
         </div>
         {selected && (
-          <div className="ml-3 w-5 h-5 rounded-full bg-purple-600 flex items-center justify-center flex-shrink-0">
-            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+          <div className="ml-3 w-5 h-5 rounded-full bg-white flex items-center justify-center flex-shrink-0">
+            <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -393,7 +393,7 @@ function ConfirmRow({ label, value, bold, accent }: { label: string; value: stri
   return (
     <div className="flex items-center justify-between">
       <span className="text-sm dark:text-white/50 text-gray-500">{label}</span>
-      <span className={`text-sm ${bold ? 'font-bold dark:text-white text-gray-900' : accent ? 'font-semibold text-purple-400' : 'dark:text-white text-gray-900'}`}>
+      <span className={`text-sm ${bold ? 'font-bold dark:text-white text-gray-900' : accent ? 'font-semibold dark:text-white text-gray-900' : 'dark:text-white text-gray-900'}`}>
         {value}
       </span>
     </div>

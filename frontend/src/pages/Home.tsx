@@ -50,7 +50,7 @@ export function Home() {
         {/* Dots */}
         <div className="absolute bottom-5 right-5 flex gap-1.5">
           {heroImages.map((_, i) => (
-            <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === heroIndex ? 'bg-purple-400' : 'bg-white/30'}`} />
+            <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === heroIndex ? 'bg-white' : 'bg-white/30'}`} />
           ))}
         </div>
       </div>
@@ -69,9 +69,9 @@ export function Home() {
         {/* CTA */}
         <button
           onClick={handleBook}
-          className="w-full py-4 rounded-2xl font-bold text-white text-base
-            bg-gradient-to-r from-purple-600 to-purple-500
-            active:scale-95 transition-transform shadow-lg shadow-purple-500/25"
+          className="w-full py-4 rounded-2xl font-bold text-black text-base
+            bg-white text-black
+            active:scale-95 transition-transform shadow-lg shadow-white/20"
         >
           Записаться
         </button>
