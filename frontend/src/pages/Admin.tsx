@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { getAdminBookings, confirmBooking, cancelBooking } from '../api'
+import { getAdminBookings, confirmBooking, cancelBooking, verifyOwnerPin } from '../api'
 import { STUDIOS } from '../data'
 import { useAppContext } from '../App'
-import { Mic2, BarChart2, Headphones, Radio, Zap, Flame } from 'lucide-react'
+import { Mic2, Lock, X } from 'lucide-react'
+import { OwnerDashboard } from './OwnerDashboard'
 
-type View = 'dashboard' | 'bookings'
+type View = 'dashboard' | 'bookings' | 'owner' | 'pin'
 type FilterStatus = 'all' | 'pending' | 'confirmed' | 'cancelled'
 
 interface RawBooking {
@@ -40,6 +41,23 @@ export function Admin() {
   const [filter, setFilter] = useState<FilterStatus>('pending')
   const [loading, setLoading] = useState(false)
   const [acting, setActing] = useState<number | null>(null)
+  const [pin, setPin] = useState('')
+  const [pinError, setPinError] = useState(false)
+  const [pinLoading, setPinLoading] = useState(false)
+
+  const handlePinDigit = (d: string) => {
+    if (pin.length >= 4) return
+    const next = pin + d
+    setPin(next)
+    setPinError(false)
+    if (next.length === 4) {
+      setPinLoading(true)
+      verifyOwnerPin(next)
+        .then(() => { setView('owner'); setPin('') })
+        .catch(() => { setPinError(true); setPin('') })
+        .finally(() => setPinLoading(false))
+    }
+  }
 
   const load = () => {
     setLoading(true)
@@ -75,6 +93,55 @@ export function Admin() {
       setBookings(prev => prev.map(b => b.id === id ? { ...b, status: updated.status } : b))
       refreshPending()
     } catch {} finally { setActing(null) }
+  }
+
+  if (view === 'owner') {
+    return <OwnerDashboard onBack={() => setView('dashboard')} />
+  }
+
+  if (view === 'pin') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-6 pb-nav">
+        <button onClick={() => { setView('dashboard'); setPin('') }}
+          className="absolute top-6 right-4 text-white/40">
+          <X size={20} />
+        </button>
+        <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
+          <Lock size={24} className="text-white/60" />
+        </div>
+        <h2 className="text-xl font-bold text-white mb-1">Режим владельца</h2>
+        <p className="text-sm text-white/40 mb-8">Введите PIN-код</p>
+
+        {/* Dots */}
+        <div className="flex gap-4 mb-8">
+          {[0,1,2,3].map(i => (
+            <div key={i} className={`w-4 h-4 rounded-full transition-all ${
+              pin.length > i
+                ? pinError ? 'bg-red-400' : 'bg-white'
+                : 'bg-white/20'
+            }`} />
+          ))}
+        </div>
+
+        {pinError && <p className="text-red-400 text-sm mb-4">Неверный PIN</p>}
+
+        {/* Numpad */}
+        <div className="grid grid-cols-3 gap-3 w-64">
+          {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
+            d === '' ? <div key={i} /> :
+            <button
+              key={i}
+              disabled={pinLoading}
+              onClick={() => d === '⌫' ? setPin(p => p.slice(0, -1)) : handlePinDigit(d)}
+              className="h-16 rounded-2xl bg-white/10 text-white text-xl font-semibold
+                active:bg-white/20 transition-colors disabled:opacity-50"
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   if (view === 'bookings') {
@@ -221,8 +288,6 @@ export function Admin() {
 
       {/* Menu tiles */}
       <div className="px-4 grid grid-cols-2 gap-3">
-
-        {/* Заявки — рабочий */}
         <button
           onClick={() => setView('bookings')}
           className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left active:scale-95 transition-transform"
@@ -237,46 +302,14 @@ export function Admin() {
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Подтверждение и отмена</div>
         </button>
 
-        {/* Аналитика — заглушка */}
-        <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
-          <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="dark:text-white/70 text-gray-600 mb-3"><BarChart2 size={22} strokeWidth={1.5} /></div>
-          <div className="font-bold dark:text-white text-gray-900 text-sm">Аналитика</div>
-          <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Статистика и графики</div>
-        </div>
-
-        {/* База клиентов — заглушка */}
-        <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
-          <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="dark:text-white/70 text-gray-600 mb-3"><Headphones size={22} strokeWidth={1.5} /></div>
-          <div className="font-bold dark:text-white text-gray-900 text-sm">База клиентов</div>
-          <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Все пользователи</div>
-        </div>
-
-        {/* Рассылки — заглушка */}
-        <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
-          <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="dark:text-white/70 text-gray-600 mb-3"><Radio size={22} strokeWidth={1.5} /></div>
-          <div className="font-bold dark:text-white text-gray-900 text-sm">Рассылки</div>
-          <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Сообщения всем клиентам</div>
-        </div>
-
-        {/* Акции — заглушка */}
-        <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
-          <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="dark:text-white/70 text-gray-600 mb-3"><Zap size={22} strokeWidth={1.5} /></div>
-          <div className="font-bold dark:text-white text-gray-900 text-sm">Акции</div>
-          <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Скидки и спецпредложения</div>
-        </div>
-
-        {/* Прогрев — заглушка */}
-        <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
-          <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="dark:text-white/70 text-gray-600 mb-3"><Flame size={22} strokeWidth={1.5} /></div>
-          <div className="font-bold dark:text-white text-gray-900 text-sm">Прогрев</div>
-          <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Авто-напоминания клиентам</div>
-        </div>
-
+        <button
+          onClick={() => setView('pin')}
+          className="relative p-5 rounded-3xl bg-white/5 border border-white/10 text-left active:scale-95 transition-transform"
+        >
+          <div className="text-white/70 mb-3"><Lock size={22} strokeWidth={1.5} /></div>
+          <div className="font-bold text-white text-sm">Режим владельца</div>
+          <div className="text-xs text-white/40 mt-0.5">Статистика, сотрудники, экспорт</div>
+        </button>
       </div>
     </div>
   )

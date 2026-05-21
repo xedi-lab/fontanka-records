@@ -53,3 +53,50 @@ export async function getAvailableSlots(studioId: string, date: string) {
   const { data } = await api.get(`/api/slots/${studioId}/${date}`)
   return data.slots as { time: string; available: boolean }[]
 }
+
+const secret = () => ({ headers: { 'x-admin-secret': import.meta.env.VITE_ADMIN_SECRET ?? '' } })
+
+export async function verifyOwnerPin(pin: string) {
+  const { data } = await api.post('/api/admin/owner/verify', { pin }, secret())
+  return data as { ok: boolean }
+}
+
+export async function getAdminStats() {
+  const { data } = await api.get('/api/admin/stats', secret())
+  return data
+}
+
+export interface Employee {
+  id: number
+  name: string
+  telegram_id?: number | null
+  role: string
+  hourly_rate: number
+  revenue_percent: number
+  created_at: string
+}
+
+export async function getEmployees() {
+  const { data } = await api.get('/api/admin/employees', secret())
+  return data as Employee[]
+}
+
+export async function createEmployee(e: Omit<Employee, 'id' | 'created_at'>) {
+  const { data } = await api.post('/api/admin/employees', e, secret())
+  return data as Employee
+}
+
+export async function updateEmployee(id: number, e: Omit<Employee, 'id' | 'created_at'>) {
+  const { data } = await api.put(`/api/admin/employees/${id}`, e, secret())
+  return data as Employee
+}
+
+export async function deleteEmployee(id: number) {
+  await api.delete(`/api/admin/employees/${id}`, secret())
+}
+
+export function getExportUrl(type: 'bookings' | 'financial') {
+  const s = import.meta.env.VITE_ADMIN_SECRET ?? ''
+  const base = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+  return `${base}/api/admin/export/${type}`
+}
