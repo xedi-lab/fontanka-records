@@ -146,7 +146,7 @@ export function Home() {
           <h3 className="text-xs font-semibold dark:text-white/40 text-gray-400 uppercase tracking-widest mb-3">
             Наши залы
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-3 stagger">
             {STUDIOS.map((studio) => (
               <button
                 key={studio.id}

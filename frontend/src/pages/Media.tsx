@@ -21,7 +21,7 @@ export function Media() {
         <p className="text-sm dark:text-white/40 text-gray-500 mt-1">Интервью, гайды и истории из студии</p>
       </div>
 
-      <div className="px-4 space-y-4 mt-2">
+      <div className="px-4 space-y-4 mt-2 stagger">
         {/* Featured */}
         <button
           onClick={() => { haptic?.impactOccurred('light'); navigate(`/media/${featured.id}`) }}

@@ -312,7 +312,7 @@ export function Admin() {
       </div>
 
       {/* Menu tiles */}
-      <div className="px-4 grid grid-cols-2 gap-3">
+      <div className="px-4 grid grid-cols-2 gap-3 stagger">
         <button
           onClick={() => setView('bookings')}
           className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left active:scale-95 transition-transform"

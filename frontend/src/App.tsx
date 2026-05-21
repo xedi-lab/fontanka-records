@@ -1,5 +1,5 @@
 import { useEffect, createContext, useContext, useState } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useTelegram } from './hooks/useTelegram'
 import { BottomNav } from './components/BottomNav'
 import { Home } from './pages/Home'
@@ -82,18 +82,27 @@ export function App() {
   return (
     <AppContext.Provider value={{ telegramId, role, isAdmin, isOwner, pendingCount, refreshPending }}>
       <div className="min-h-screen dark:bg-[#0d0d0d] bg-[#f5f5f5] dark:text-white text-gray-900 transition-colors">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/studios" element={<Studios />} />
-          <Route path="/booking" element={<Booking />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={isAdmin ? <Admin /> : <Navigate to="/" replace />} />
-          <Route path="/media" element={<Media />} />
-          <Route path="/media/:id" element={<Article />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AnimatedRoutes isAdmin={isAdmin} />
         <BottomNav />
       </div>
     </AppContext.Provider>
+  )
+}
+
+function AnimatedRoutes({ isAdmin }: { isAdmin: boolean }) {
+  const location = useLocation()
+  return (
+    <div key={location.pathname} className="page-enter">
+      <Routes location={location}>
+        <Route path="/" element={<Home />} />
+        <Route path="/studios" element={<Studios />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/admin" element={isAdmin ? <Admin /> : <Navigate to="/" replace />} />
+        <Route path="/media" element={<Media />} />
+        <Route path="/media/:id" element={<Article />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   )
 }

@@ -81,7 +81,7 @@ export function OwnerDashboard({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Tiles */}
-      <div className="px-4 grid grid-cols-2 gap-3">
+      <div className="px-4 grid grid-cols-2 gap-3 stagger">
         <Tile
           icon={<TrendingUp size={22} strokeWidth={1.5} />}
           title="Аналитика"
