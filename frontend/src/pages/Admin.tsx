@@ -94,74 +94,107 @@ export function Admin() {
 
   if (view === 'pin') {
     return (
-      <div className="pb-nav flex flex-col" style={{ minHeight: '100svh' }}>
+      <div className="pb-nav flex flex-col" style={{ minHeight: '100svh', background: 'linear-gradient(160deg, #111111 0%, #0a0a0a 50%, #0d0d0d 100%)' }}>
+        {/* Ambient glow orbs */}
+        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 280, height: 280, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '5%', left: '20%', width: 160, height: 160, borderRadius: '50%', background: 'radial-gradient(circle, rgba(200,200,255,0.03) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
         {/* Close */}
-        <div className="flex justify-end px-4 pt-5">
-          <button onClick={() => { setView('dashboard'); setPin('') }}
-            className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/40">
-            <X size={16} />
+        <div className="flex justify-end px-5 pt-5" style={{ position: 'relative', zIndex: 1 }}>
+          <button
+            onClick={() => { setView('dashboard'); setPin('') }}
+            style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <X size={15} color="rgba(255,255,255,0.4)" />
           </button>
         </div>
 
-        {/* Logo + text */}
-        <div className="flex flex-col items-center justify-center flex-1 gap-1 py-8">
-          <div className="relative mb-4">
-            <img src="/assets/logo.jpg" alt="logo"
-              className="w-20 h-20 rounded-full object-cover"
-              style={{ boxShadow: '0 0 40px rgba(255,255,255,0.15)' }} />
-            <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#0d0d0d] flex items-center justify-center">
-              <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
-                <Lock size={10} className="text-white/50" />
-              </div>
+        {/* Logo + identity */}
+        <div className="flex flex-col items-center" style={{ flex: 1, justifyContent: 'center', gap: 0, position: 'relative', zIndex: 1, paddingBottom: 24 }}>
+          {/* Logo ring */}
+          <div style={{ position: 'relative', marginBottom: 20 }}>
+            {/* Outer glow ring */}
+            <div style={{ position: 'absolute', inset: -6, borderRadius: '50%', background: 'conic-gradient(from 0deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03), rgba(255,255,255,0.15), rgba(255,255,255,0.03), rgba(255,255,255,0.15))', }} />
+            <div style={{ position: 'absolute', inset: -5, borderRadius: '50%', background: '#0d0d0d' }} />
+            <img
+              src="/assets/logo.jpg"
+              alt="logo"
+              style={{ width: 88, height: 88, borderRadius: '50%', objectFit: 'cover', display: 'block', position: 'relative', boxShadow: '0 0 0 1px rgba(255,255,255,0.1), 0 0 40px rgba(255,255,255,0.12), 0 8px 32px rgba(0,0,0,0.6)' }}
+            />
+            {/* Lock badge */}
+            <div style={{ position: 'absolute', bottom: -2, right: -2, width: 26, height: 26, borderRadius: '50%', background: 'linear-gradient(135deg, #1a1a1a, #111)', border: '1px solid rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+              <Lock size={11} color="rgba(255,255,255,0.6)" />
             </div>
           </div>
 
-          <h2 className="text-white text-xl font-black tracking-widest uppercase">Фонтанка Рэкордс</h2>
-          <p className="text-xs text-white/40 tracking-widest uppercase mt-1">Режим владельца</p>
-
-          {/* Dots */}
-          <div className="flex gap-5 mt-8 mb-2">
-            {[0,1,2,3].map(i => (
-              <div key={i} className={`rounded-full transition-all duration-150 ${
-                pin.length > i
-                  ? pinError ? 'w-4 h-4 bg-red-400' : 'w-4 h-4 bg-white'
-                  : 'w-3.5 h-3.5 bg-white/20'
-              }`} />
-            ))}
+          {/* Title */}
+          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 6 }}>Санкт-Петербург</p>
+          <h2 style={{ color: 'white', fontSize: 20, fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>Фонтанка Рэкордс</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 36 }}>
+            <div style={{ height: 1, width: 24, background: 'rgba(255,255,255,0.15)' }} />
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase' }}>Режим владельца</p>
+            <div style={{ height: 1, width: 24, background: 'rgba(255,255,255,0.15)' }} />
           </div>
 
-          <div className="h-6 flex items-center">
-            {pinError && <p className="text-red-400 text-sm">Неверный PIN</p>}
-            {pinLoading && <p className="text-white/40 text-sm">Проверяем...</p>}
+          {/* PIN dots */}
+          <div style={{ display: 'flex', gap: 16, marginBottom: 10 }}>
+            {[0,1,2,3].map(i => {
+              const filled = pin.length > i
+              const err = filled && pinError
+              return (
+                <div key={i} style={{
+                  width: filled ? 14 : 12,
+                  height: filled ? 14 : 12,
+                  borderRadius: '50%',
+                  background: err ? '#f87171' : filled ? 'white' : 'transparent',
+                  border: err ? 'none' : filled ? 'none' : '1.5px solid rgba(255,255,255,0.25)',
+                  boxShadow: filled && !err ? '0 0 12px rgba(255,255,255,0.5)' : 'none',
+                  transition: 'all 0.15s ease',
+                }} />
+              )
+            })}
+          </div>
+
+          <div style={{ height: 22, display: 'flex', alignItems: 'center' }}>
+            {pinError && <p style={{ color: '#f87171', fontSize: 12, letterSpacing: '0.05em' }}>Неверный PIN-код</p>}
+            {pinLoading && <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>Проверяем...</p>}
           </div>
         </div>
 
         {/* Numpad */}
-        <div className="grid grid-cols-3 px-6 pb-6" style={{ gap: '8px' }}>
-          {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
-            d === '' ? <div key={i} /> :
-            <button
-              key={i}
-              disabled={pinLoading}
-              onClick={() => d === '⌫' ? setPin(p => p.slice(0, -1)) : handlePinDigit(d)}
-              style={{
-                height: 64,
-                borderRadius: 16,
-                background: 'rgba(255,255,255,0.06)',
-                color: d === '⌫' ? 'rgba(255,255,255,0.4)' : 'white',
-                fontSize: d === '⌫' ? 20 : 26,
-                fontWeight: 600,
-                border: 'none',
-                cursor: 'pointer',
-                opacity: pinLoading ? 0.4 : 1,
-              }}
-            >
-              {d}
-            </button>
-          ))}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, padding: '0 28px 12px', position: 'relative', zIndex: 1 }}>
+          {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => {
+            if (d === '') return <div key={i} />
+            const isBackspace = d === '⌫'
+            return (
+              <button
+                key={i}
+                disabled={pinLoading}
+                onClick={() => isBackspace ? setPin(p => p.slice(0, -1)) : handlePinDigit(d)}
+                style={{
+                  height: 68,
+                  borderRadius: 18,
+                  background: isBackspace ? 'transparent' : 'rgba(255,255,255,0.06)',
+                  border: isBackspace ? 'none' : '1px solid rgba(255,255,255,0.07)',
+                  color: isBackspace ? 'rgba(255,255,255,0.35)' : 'white',
+                  fontSize: isBackspace ? 22 : 28,
+                  fontWeight: isBackspace ? 400 : 300,
+                  letterSpacing: isBackspace ? 0 : '0.02em',
+                  cursor: 'pointer',
+                  opacity: pinLoading ? 0.4 : 1,
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  transition: 'all 0.1s ease',
+                  boxShadow: isBackspace ? 'none' : 'inset 0 1px 0 rgba(255,255,255,0.05)',
+                }}
+              >
+                {d}
+              </button>
+            )
+          })}
         </div>
 
-        <p className="text-white/20 text-xs text-center pb-4">
+        <p style={{ color: 'rgba(255,255,255,0.12)', fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', textAlign: 'center', paddingBottom: 12 }}>
           Гороховая 70 · Санкт-Петербург
         </p>
       </div>
