@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState, Suspense, Component } from 'react'
 import type { ReactNode, ErrorInfo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
+import type { RootState } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 
@@ -38,7 +39,7 @@ function ButterflyMesh() {
     }
   }, [])
 
-  useFrame((state) => {
+  useFrame((state: RootState) => {
     if (meshRef.current) {
       meshRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 1.2) * 0.04)
     }
