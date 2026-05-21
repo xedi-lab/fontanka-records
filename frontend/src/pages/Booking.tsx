@@ -158,7 +158,7 @@ export function Booking() {
 
       {/* Step: Service */}
       {step === 'service' && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in pb-28">
           <div className="flex gap-2 px-4 mb-4 overflow-x-auto pb-1">
             {SERVICE_CATEGORIES.map(cat => (
               <button
@@ -195,7 +195,7 @@ export function Booking() {
 
       {/* Step: Studio */}
       {step === 'studio' && (
-        <div className="px-4 space-y-3 animate-fade-in">
+        <div className="px-4 space-y-3 animate-fade-in pb-28">
           {STUDIOS.map(studio => (
             <button
               key={studio.id}
@@ -338,15 +338,11 @@ export function Booking() {
       )}
 
       {/* Bottom CTA */}
-      {step !== 'confirm' && (
+      {step !== 'confirm' && canProceed() && (
         <div className="fixed bottom-[72px] left-0 right-0 px-4 pb-3">
           <button
             onClick={next}
-            disabled={!canProceed()}
-            className={`w-full py-4 rounded-2xl font-bold text-base transition-all
-              ${canProceed()
-                ? 'bg-white text-black active:scale-95 shadow-lg shadow-white/20'
-                : 'bg-white/20 text-white/40 cursor-not-allowed'}`}
+            className="w-full py-4 rounded-2xl font-bold text-base transition-all bg-white text-black active:scale-95 shadow-lg shadow-white/20"
           >
             Далее
           </button>
