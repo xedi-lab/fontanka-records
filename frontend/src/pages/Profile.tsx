@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { useNavigate } from 'react-router-dom'
-import { Compass, Moon, Radio, Mic2 } from 'lucide-react'
+import { Compass, Moon, Radio, Mic2, Sun } from 'lucide-react'
 import { useTelegram } from '../hooks/useTelegram'
 import { useBookingStore } from '../store/bookingStore'
 import { useAppContext } from '../App'
@@ -17,9 +17,11 @@ const STATUS_LABELS: Record<Booking['status'], { label: string; color: string }>
   cancelled: { label: 'Отменена',     color: 'text-red-400' },
 }
 
+const APP_VERSION = '1.0.0'
+
 export function Profile() {
   const { user } = useTelegram()
-  const { telegramId } = useAppContext()
+  const { telegramId, theme, setThemeOverride } = useAppContext()
   const { myBookings, addBooking } = useBookingStore()
   const navigate = useNavigate()
   const [apiBookings, setApiBookings] = useState<Booking[]>([])
@@ -104,6 +106,36 @@ export function Profile() {
           {history.map(b => <BookingCard key={b.id} booking={b} />)}
         </Section>
       )}
+
+      {/* Settings */}
+      <Section title="Настройки">
+        <div className="rounded-2xl dark:bg-white/5 bg-black/5 overflow-hidden">
+          {/* Theme toggle */}
+          <div className="flex items-center justify-between px-4 py-3.5 border-b dark:border-white/5 border-black/5">
+            <div className="flex items-center gap-3">
+              <span className="dark:text-white/50 text-gray-400">
+                {theme === 'dark' ? <Moon size={18} strokeWidth={1.5} /> : <Sun size={18} strokeWidth={1.5} />}
+              </span>
+              <div>
+                <div className="text-sm font-medium dark:text-white text-gray-900">Тема</div>
+                <div className="text-xs dark:text-white/40 text-gray-400">{theme === 'dark' ? 'Тёмная' : 'Светлая'}</div>
+              </div>
+            </div>
+            <button
+              onClick={() => setThemeOverride(theme === 'dark' ? 'light' : 'dark')}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${theme === 'dark' ? 'bg-white/20' : 'bg-black/20'}`}
+            >
+              <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-200 ${theme === 'dark' ? 'left-0.5' : 'left-6'}`} />
+            </button>
+          </div>
+
+          {/* Version */}
+          <div className="flex items-center justify-between px-4 py-3.5">
+            <div className="text-sm dark:text-white/50 text-gray-500">Версия приложения</div>
+            <div className="text-sm font-mono dark:text-white/30 text-gray-400">{APP_VERSION}</div>
+          </div>
+        </div>
+      </Section>
 
       {/* Contacts */}
       <Section title="Контакты">
