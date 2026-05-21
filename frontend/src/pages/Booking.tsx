@@ -10,8 +10,8 @@ import { createBooking, getAvailableSlots } from '../api'
 import type { ServiceCategory, Service, StudioId } from '../types'
 
 type Step = 'service' | 'studio' | 'datetime' | 'confirm'
-const STEPS: Step[] = ['service', 'studio', 'datetime', 'confirm']
-const STEP_LABELS = ['Услуга', 'Зал', 'Дата и время', 'Подтверждение']
+const ALL_STEPS: Step[] = ['service', 'studio', 'datetime', 'confirm']
+const ALL_LABELS = ['Услуга', 'Зал', 'Дата и время', 'Подтверждение']
 
 function getDates(count = 14): Date[] {
   return Array.from({ length: count }, (_, i) => addDays(new Date(), i))
@@ -31,6 +31,13 @@ export function Booking() {
   const [submitting, setSubmitting] = useState(false)
   const [slots, setSlots] = useState<{ time: string; available: boolean }[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
+
+  const STEPS = store.selectedStudio
+    ? ALL_STEPS.filter(s => s !== 'studio')
+    : ALL_STEPS
+  const STEP_LABELS = store.selectedStudio
+    ? ALL_LABELS.filter((_, i) => ALL_STEPS[i] !== 'studio')
+    : ALL_LABELS
 
   const stepIndex = STEPS.indexOf(step)
   const filteredServices = SERVICES.filter(s => s.category === activeCategory)
@@ -58,22 +65,14 @@ export function Booking() {
   const next = () => {
     if (!canProceed()) return
     haptic?.impactOccurred('light')
-    let nextStep = STEPS[stepIndex + 1]
-    // Skip studio step if already pre-selected (e.g. came from Studios page)
-    if (nextStep === 'studio' && store.selectedStudio) nextStep = STEPS[stepIndex + 2]
+    const nextStep = STEPS[stepIndex + 1]
     if (nextStep) setStep(nextStep)
   }
 
   const back = () => {
     haptic?.impactOccurred('light')
     if (stepIndex === 0) navigate(-1)
-    else {
-      let prevStep = STEPS[stepIndex - 1]
-      // Skip studio step going back if it was pre-selected
-      if (prevStep === 'studio' && store.selectedStudio) prevStep = STEPS[stepIndex - 2]
-      if (prevStep) setStep(prevStep)
-      else navigate(-1)
-    }
+    else setStep(STEPS[stepIndex - 1])
   }
 
   const confirm = async () => {
