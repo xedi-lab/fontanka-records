@@ -101,7 +101,7 @@ export function Admin() {
 
   if (view === 'pin') {
     return (
-      <div className="flex flex-col items-center min-h-screen bg-[#0d0d0d] relative overflow-hidden">
+      <div className="flex flex-col items-center min-h-screen bg-[#0d0d0d] relative overflow-hidden pb-nav">
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full"
