@@ -170,17 +170,18 @@ export function Admin() {
   }
 
   if (view === 'bookings') {
+    const sortedFiltered = filtered
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
     return (
-      <div className="pb-nav animate-fade-in">
+      <div className="pb-nav page-enter">
         <div className="px-4 pt-6 pb-4 flex items-center gap-3">
-          <button onClick={() => setView('dashboard')} className="dark:text-white/60 text-gray-400">
+          <button onClick={() => setView('dashboard')} className="text-white/60">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <div>
-            <h1 className="text-xl font-bold dark:text-white text-gray-900">Заявки</h1>
-          </div>
+          <h1 className="text-xl font-bold text-white">Заявки</h1>
           {pendingCount > 0 && (
             <div className="ml-auto w-7 h-7 rounded-full bg-yellow-400 flex items-center justify-center">
               <span className="text-black text-xs font-bold">{pendingCount}</span>
@@ -189,15 +190,13 @@ export function Admin() {
         </div>
 
         {/* Filters */}
-        <div className="px-4 mb-4 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className="px-4 mb-4 flex gap-2" style={{ overflowX: 'auto', scrollbarWidth: 'none' }}>
           {FILTERS.map(f => (
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                filter === f.id
-                  ? 'bg-white text-black'
-                  : 'dark:bg-white/10 bg-black/10 dark:text-white/60 text-gray-500'
+                filter === f.id ? 'bg-white text-black' : 'bg-white/10 text-white/60'
               }`}
             >
               {f.label}
@@ -208,21 +207,19 @@ export function Admin() {
           ))}
         </div>
 
-        <div className="px-4 space-y-3">
+        <div className="px-4 space-y-3 stagger">
           {loading ? (
-            <div className="text-center py-12 dark:text-white/30 text-gray-400 text-sm">Загружаем...</div>
-          ) : filtered.length === 0 ? (
-            <div className="text-center py-12 dark:text-white/30 text-gray-400 text-sm">Записей нет</div>
+            <div className="text-center py-12 text-white/30 text-sm">Загружаем...</div>
+          ) : sortedFiltered.length === 0 ? (
+            <div className="text-center py-12 text-white/30 text-sm">Записей нет</div>
           ) : (
-            filtered
-              .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-              .map(b => {
+            sortedFiltered.map(b => {
                 const studio = STUDIOS.find(s => s.id === b.studio_id)
                 const st = STATUS_LABELS[b.status] ?? { label: b.status, color: 'text-white/40' }
                 const isActing = acting === b.id
 
                 return (
-                  <div key={b.id} className="p-4 rounded-2xl dark:bg-white/5 bg-black/5">
+                  <div key={b.id} className="p-4 rounded-2xl bg-white/5">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="font-semibold dark:text-white text-gray-900 text-sm">{b.service_title}</div>
