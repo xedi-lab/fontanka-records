@@ -51,7 +51,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS employees (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            telegram_id INTEGER UNIQUE,
+            telegram_id INTEGER UNIQUE NOT NULL,
             role TEXT DEFAULT 'Сотрудник',
             hourly_rate REAL DEFAULT 0,
             revenue_percent REAL DEFAULT 0,
@@ -96,6 +96,17 @@ def notify_admins(text):
 @app.get("/health")
 def health():
     return jsonify({"status": "ok"})
+
+
+@app.get("/api/role/<int:telegram_id>")
+def get_role(telegram_id):
+    if telegram_id in ADMIN_IDS:
+        return jsonify({"role": "owner"})
+    db = get_db()
+    emp = db.execute("SELECT id FROM employees WHERE telegram_id=?", (telegram_id,)).fetchone()
+    if emp:
+        return jsonify({"role": "staff"})
+    return jsonify({"role": "user"})
 
 
 # Users
