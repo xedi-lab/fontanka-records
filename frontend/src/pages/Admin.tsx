@@ -101,45 +101,86 @@ export function Admin() {
 
   if (view === 'pin') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen px-6 pb-nav">
-        <button onClick={() => { setView('dashboard'); setPin('') }}
-          className="absolute top-6 right-4 text-white/40">
-          <X size={20} />
-        </button>
-        <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
-          <Lock size={24} className="text-white/60" />
+      <div className="flex flex-col items-center min-h-screen bg-[#0d0d0d] relative overflow-hidden">
+        {/* Background glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)' }} />
         </div>
-        <h2 className="text-xl font-bold text-white mb-1">Режим владельца</h2>
-        <p className="text-sm text-white/40 mb-8">Введите PIN-код</p>
+
+        {/* Close */}
+        <button onClick={() => { setView('dashboard'); setPin('') }}
+          className="absolute top-6 right-5 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/40 z-10">
+          <X size={16} />
+        </button>
+
+        {/* Top section */}
+        <div className="flex flex-col items-center pt-20 pb-10 px-6">
+          {/* Logo */}
+          <div className="mb-5 relative">
+            <img src="/assets/logo.jpg" alt="Фонтанка Рэкордс"
+              className="w-20 h-20 rounded-full object-cover"
+              style={{ boxShadow: '0 0 40px rgba(255,255,255,0.15), 0 0 80px rgba(255,255,255,0.05)' }} />
+            <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#0d0d0d] flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
+                <Lock size={10} className="text-white/60" />
+              </div>
+            </div>
+          </div>
+
+          <h2 className="text-shimmer text-xl font-black tracking-widest uppercase text-center mb-1">
+            Фонтанка Рэкордс
+          </h2>
+          <p className="text-xs text-white/30 tracking-[0.2em] uppercase mb-2">Режим владельца</p>
+          <p className="text-sm text-white/40">Введите PIN-код для доступа</p>
+        </div>
 
         {/* Dots */}
-        <div className="flex gap-4 mb-8">
+        <div className="flex gap-5 mb-3">
           {[0,1,2,3].map(i => (
-            <div key={i} className={`w-4 h-4 rounded-full transition-all ${
+            <div key={i} className={`rounded-full transition-all duration-200 ${
               pin.length > i
-                ? pinError ? 'bg-red-400' : 'bg-white'
-                : 'bg-white/20'
+                ? pinError
+                  ? 'w-4 h-4 bg-red-400 shadow-[0_0_12px_rgba(248,113,113,0.8)]'
+                  : 'w-4 h-4 bg-white shadow-[0_0_12px_rgba(255,255,255,0.6)]'
+                : 'w-3 h-3 bg-white/15'
             }`} />
           ))}
         </div>
 
-        {pinError && <p className="text-red-400 text-sm mb-4">Неверный PIN</p>}
+        <div className="h-6 flex items-center mb-8">
+          {pinError && (
+            <p className="text-red-400 text-xs tracking-wider animate-pulse">Неверный PIN-код</p>
+          )}
+          {pinLoading && (
+            <p className="text-white/30 text-xs tracking-wider">Проверяем...</p>
+          )}
+        </div>
 
         {/* Numpad */}
-        <div className="grid grid-cols-3 gap-3 w-64">
+        <div className="grid grid-cols-3 gap-3 px-8 w-full max-w-xs">
           {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
             d === '' ? <div key={i} /> :
             <button
               key={i}
               disabled={pinLoading}
               onClick={() => d === '⌫' ? setPin(p => p.slice(0, -1)) : handlePinDigit(d)}
-              className="h-16 rounded-2xl bg-white/10 text-white text-xl font-semibold
-                active:bg-white/20 transition-colors disabled:opacity-50"
+              className={`h-16 rounded-2xl text-white font-semibold transition-all active:scale-95 disabled:opacity-40
+                ${d === '⌫'
+                  ? 'bg-white/5 text-white/40 text-lg'
+                  : 'bg-white/8 text-2xl border border-white/5 active:bg-white/15'
+                }`}
+              style={d !== '⌫' ? { backdropFilter: 'blur(10px)' } : {}}
             >
               {d}
             </button>
           ))}
         </div>
+
+        {/* Bottom branding */}
+        <p className="text-white/15 text-[10px] tracking-[0.3em] uppercase mt-auto mb-8">
+          Гороховая 70 · Санкт-Петербург
+        </p>
       </div>
     )
   }
