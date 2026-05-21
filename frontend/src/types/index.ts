@@ -45,3 +45,21 @@ export interface BookingState {
   selectedDate: Date | null
   selectedTime: string | null
 }
+
+export interface ArticleBlock {
+  type: 'paragraph' | 'heading' | 'quote' | 'qa'
+  text?: string
+  question?: string
+  answer?: string
+}
+
+export interface Article {
+  id: string
+  title: string
+  subtitle: string
+  cover: string
+  date: string
+  readTime: number
+  tag: string
+  blocks: ArticleBlock[]
+}

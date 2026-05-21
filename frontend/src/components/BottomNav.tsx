@@ -5,6 +5,7 @@ const baseTabs = [
   { to: '/', icon: HomeIcon, label: 'Главная' },
   { to: '/studios', icon: StudiosIcon, label: 'Залы' },
   { to: '/booking', icon: BookIcon, label: 'Запись' },
+  { to: '/media', icon: MediaIcon, label: 'Медиа' },
   { to: '/profile', icon: ProfileIcon, label: 'Профиль' },
 ]
 
@@ -82,6 +83,16 @@ function BookIcon({ size }: { size: number }) {
       <line x1="8" y1="2" x2="8" y2="6"/>
       <line x1="3" y1="10" x2="21" y2="10"/>
       <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+    </svg>
+  )
+}
+
+function MediaIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/>
+      <path d="M8 20h8M12 16v4"/>
+      <path d="M9 9h6M9 12h4"/>
     </svg>
   )
 }

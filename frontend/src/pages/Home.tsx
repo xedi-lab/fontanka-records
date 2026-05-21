@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../hooks/useTelegram'
-import { STUDIOS } from '../data'
-import { Compass, Moon, Zap, Mic2 } from 'lucide-react'
+import { STUDIOS, ARTICLES } from '../data'
+import { Compass, Moon, Zap, Mic2, Clock } from 'lucide-react'
 import { ArtistsTicker } from '../components/ArtistsTicker'
 
 export function Home() {
   const { user, haptic } = useTelegram()
   const navigate = useNavigate()
   const [heroIndex, setHeroIndex] = useState(0)
+  const featuredArticle = useMemo(() => ARTICLES[Math.floor(Math.random() * ARTICLES.length)], [])
 
   const heroImages = [
     '/assets/studio-a-2.jpg',
@@ -111,6 +112,34 @@ export function Home() {
 
         {/* Artists */}
         <ArtistsTicker />
+
+        {/* Article banner */}
+        <div>
+          <h3 className="text-xs font-semibold dark:text-white/40 text-gray-400 uppercase tracking-widest mb-3">
+            Читать
+          </h3>
+          <button
+            onClick={() => { haptic?.impactOccurred('light'); navigate(`/media/${featuredArticle.id}`) }}
+            className="w-full relative rounded-2xl overflow-hidden active:scale-[0.98] transition-all"
+            style={{ height: 120 }}
+          >
+            <img src={featuredArticle.cover} alt={featuredArticle.title} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
+            <div className="absolute inset-0 p-4 flex flex-col justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full
+                bg-white/20 text-white backdrop-blur-sm border border-white/20 self-start">
+                {featuredArticle.tag}
+              </span>
+              <div>
+                <p className="text-sm font-bold text-white leading-tight">{featuredArticle.title}</p>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <Clock size={10} className="text-white/40" />
+                  <span className="text-[10px] text-white/50">{featuredArticle.readTime} мин</span>
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
 
         {/* Studios */}
         <div>

@@ -7,6 +7,8 @@ import { Studios } from './pages/Studios'
 import { Booking } from './pages/Booking'
 import { Profile } from './pages/Profile'
 import { Admin } from './pages/Admin'
+import { Media } from './pages/Media'
+import { Article } from './pages/Article'
 import { upsertUser, getAdminBookings } from './api'
 
 const ADMIN_IDS = (import.meta.env.VITE_ADMIN_IDS ?? '')
@@ -69,6 +71,8 @@ export function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin" element={isAdmin ? <Admin /> : <Navigate to="/" replace />} />
+          <Route path="/media" element={<Media />} />
+          <Route path="/media/:id" element={<Article />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <BottomNav />
