@@ -58,14 +58,22 @@ export function Booking() {
   const next = () => {
     if (!canProceed()) return
     haptic?.impactOccurred('light')
-    const nextStep = STEPS[stepIndex + 1]
+    let nextStep = STEPS[stepIndex + 1]
+    // Skip studio step if already pre-selected (e.g. came from Studios page)
+    if (nextStep === 'studio' && store.selectedStudio) nextStep = STEPS[stepIndex + 2]
     if (nextStep) setStep(nextStep)
   }
 
   const back = () => {
     haptic?.impactOccurred('light')
     if (stepIndex === 0) navigate(-1)
-    else setStep(STEPS[stepIndex - 1])
+    else {
+      let prevStep = STEPS[stepIndex - 1]
+      // Skip studio step going back if it was pre-selected
+      if (prevStep === 'studio' && store.selectedStudio) prevStep = STEPS[stepIndex - 2]
+      if (prevStep) setStep(prevStep)
+      else navigate(-1)
+    }
   }
 
   const confirm = async () => {

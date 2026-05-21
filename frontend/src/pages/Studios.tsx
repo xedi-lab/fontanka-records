@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { STUDIOS } from '../data'
 import { useTelegram } from '../hooks/useTelegram'
+import { useBookingStore } from '../store/bookingStore'
 import type { Studio } from '../types'
 
 export function Studios() {
@@ -9,6 +10,7 @@ export function Studios() {
   const [photoIndex, setPhotoIndex] = useState(0)
   const navigate = useNavigate()
   const { haptic } = useTelegram()
+  const { setStudio } = useBookingStore()
   const touchStartX = useRef<number>(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -188,7 +190,7 @@ export function Studios() {
               </div>
 
               <button
-                onClick={() => { close(); navigate('/booking') }}
+                onClick={() => { if (selected) setStudio(selected.id); close(); navigate('/booking') }}
                 className="w-full py-4 rounded-2xl font-bold text-white text-base active:scale-95 transition-transform"
                 style={{ background: `linear-gradient(135deg, ${selected.color}, ${selected.color}bb)` }}
               >
