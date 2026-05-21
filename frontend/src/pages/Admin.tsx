@@ -95,8 +95,8 @@ export function Admin() {
   if (view === 'pin') {
     return (
       <div
-        className="fixed inset-0 bg-[#0d0d0d] flex flex-col overflow-hidden"
-        style={{ paddingBottom: 'calc(64px + env(safe-area-inset-bottom, 0px))' }}
+        className="fixed inset-0 bg-[#0d0d0d] flex flex-col overflow-hidden z-[100]"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
         {/* Close */}
         <button onClick={() => { setView('dashboard'); setPin('') }}
@@ -117,8 +117,8 @@ export function Admin() {
             </div>
           </div>
 
-          <h2 className="text-shimmer text-lg font-black tracking-widest uppercase">Фонтанка Рэкордс</h2>
-          <p className="text-[10px] text-white/30 tracking-[0.25em] uppercase">Режим владельца</p>
+          <h2 className="text-white text-lg font-black tracking-widest uppercase">Фонтанка Рэкордс</h2>
+          <p className="text-[10px] text-white/40 tracking-[0.25em] uppercase">Режим владельца</p>
 
           {/* Dots */}
           <div className="flex gap-4 mt-6 mb-1">
