@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useAppContext } from '../App'
+import { useState, useEffect } from 'react'
 
 const baseTabs = [
   { to: '/', icon: HomeIcon, label: 'Главная' },
@@ -11,9 +12,22 @@ const baseTabs = [
 
 export function BottomNav() {
   const { isAdmin, pendingCount } = useAppContext()
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const initialHeight = vv.height
+    const onResize = () => setHidden(vv.height < initialHeight * 0.85)
+    vv.addEventListener('resize', onResize)
+    return () => vv.removeEventListener('resize', onResize)
+  }, [])
+
   const tabs = isAdmin
     ? [...baseTabs, { to: '/admin', icon: AdminIcon, label: 'Админ' }]
     : baseTabs
+
+  if (hidden) return null
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bottom-nav-height z-50 border-t
