@@ -160,17 +160,16 @@ export function Admin() {
         {/* Numpad */}
         <div className="grid grid-cols-3 gap-3 px-8 w-full max-w-xs">
           {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
-            d === '' ? <div key={i} /> :
+            d === '' ? <div key={i} className="h-16" /> :
             <button
               key={i}
               disabled={pinLoading}
               onClick={() => d === '⌫' ? setPin(p => p.slice(0, -1)) : handlePinDigit(d)}
               className={`h-16 rounded-2xl text-white font-semibold transition-all active:scale-95 disabled:opacity-40
                 ${d === '⌫'
-                  ? 'bg-white/5 text-white/40 text-lg'
-                  : 'bg-white/8 text-2xl border border-white/5 active:bg-white/15'
+                  ? 'bg-white/10 text-white/40 text-xl'
+                  : 'bg-white/10 text-2xl border border-white/10 active:bg-white/20'
                 }`}
-              style={d !== '⌫' ? { backdropFilter: 'blur(10px)' } : {}}
             >
               {d}
             </button>
