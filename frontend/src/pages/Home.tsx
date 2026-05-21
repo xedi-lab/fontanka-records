@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../hooks/useTelegram'
 import { STUDIOS } from '../data'
 import { Compass, Moon, Zap, Mic2 } from 'lucide-react'
+import { ArtistsTicker } from '../components/ArtistsTicker'
 
 export function Home() {
   const { user, haptic } = useTelegram()
@@ -107,6 +108,9 @@ export function Home() {
             />
           </button>
         </div>
+
+        {/* Artists */}
+        <ArtistsTicker />
 
         {/* Studios */}
         <div>

@@ -93,6 +93,24 @@ img {
   z-index: 1;
 }
 
+@keyframes ticker-fwd {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes ticker-rev {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.ticker-forward {
+  animation: ticker-fwd 28s linear infinite;
+}
+
+.ticker-reverse {
+  animation: ticker-rev 22s linear infinite;
+}
+
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
