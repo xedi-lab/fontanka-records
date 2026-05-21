@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { useNavigate } from 'react-router-dom'
+import { Compass, Moon, Radio, Mic2 } from 'lucide-react'
 import { useTelegram } from '../hooks/useTelegram'
 import { useBookingStore } from '../store/bookingStore'
 import { useAppContext } from '../App'
@@ -92,7 +93,7 @@ export function Profile() {
         {loading ? (
           <div className="text-center py-6 dark:text-white/30 text-gray-400 text-sm">Загружаем...</div>
         ) : upcoming.length === 0 ? (
-          <EmptyState emoji="🎤" text="Нет активных записей" action="Записаться" onAction={() => navigate('/booking')} />
+          <EmptyState icon={<Mic2 size={40} strokeWidth={1} />} text="Нет активных записей" action="Записаться" onAction={() => navigate('/booking')} />
         ) : (
           upcoming.map(b => <BookingCard key={b.id} booking={b} onCancel={handleCancel} />)
         )}
@@ -107,9 +108,9 @@ export function Profile() {
       {/* Contacts */}
       <Section title="Контакты">
         <div className="space-y-2">
-          <ContactRow emoji="📍" label="Адрес" value="Гороховая 70, СПб" />
-          <ContactRow emoji="🕐" label="Работаем" value="Круглосуточно" />
-          <ContactRow emoji="✈️" label="Telegram" value="@fontanka_records" />
+          <ContactRow icon={<Compass size={18} strokeWidth={1.5} />} label="Адрес" value="Гороховая 70, СПб" />
+          <ContactRow icon={<Moon size={18} strokeWidth={1.5} />} label="Работаем" value="Круглосуточно" />
+          <ContactRow icon={<Radio size={18} strokeWidth={1.5} />} label="Telegram" value="@fontanka_records" />
         </div>
       </Section>
     </div>
@@ -178,10 +179,10 @@ function BookingCard({ booking, onCancel }: { booking: Booking; onCancel?: (id: 
   )
 }
 
-function EmptyState({ emoji, text, action, onAction }: { emoji: string; text: string; action: string; onAction: () => void }) {
+function EmptyState({ icon, text, action, onAction }: { icon: React.ReactNode; text: string; action: string; onAction: () => void }) {
   return (
     <div className="py-8 text-center">
-      <div className="text-4xl mb-2">{emoji}</div>
+      <div className="flex justify-center dark:text-white/30 text-gray-300 mb-3">{icon}</div>
       <p className="text-sm dark:text-white/40 text-gray-400 mb-4">{text}</p>
       <button onClick={onAction} className="px-6 py-2.5 rounded-xl bg-white text-black text-sm font-semibold active:scale-95 transition-transform shadow-lg shadow-white/20">
         {action}
@@ -190,10 +191,10 @@ function EmptyState({ emoji, text, action, onAction }: { emoji: string; text: st
   )
 }
 
-function ContactRow({ emoji, label, value }: { emoji: string; label: string; value: string }) {
+function ContactRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 py-2">
-      <span className="text-lg">{emoji}</span>
+      <span className="dark:text-white/50 text-gray-400">{icon}</span>
       <div>
         <div className="text-xs dark:text-white/40 text-gray-400">{label}</div>
         <div className="text-sm font-medium dark:text-white text-gray-900">{value}</div>

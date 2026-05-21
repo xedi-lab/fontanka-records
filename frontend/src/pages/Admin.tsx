@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getAdminBookings, confirmBooking, cancelBooking } from '../api'
 import { STUDIOS } from '../data'
 import { useAppContext } from '../App'
+import { Mic2, BarChart2, Headphones, Radio, Zap, Flame } from 'lucide-react'
 
 type View = 'dashboard' | 'bookings'
 type FilterStatus = 'all' | 'pending' | 'confirmed' | 'cancelled'
@@ -231,7 +232,7 @@ export function Admin() {
               {pendingCount}
             </span>
           )}
-          <div className="text-2xl mb-3">📋</div>
+          <div className="dark:text-white/70 text-gray-600 mb-3"><Mic2 size={22} strokeWidth={1.5} /></div>
           <div className="font-bold dark:text-white text-gray-900 text-sm">Заявки</div>
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Подтверждение и отмена</div>
         </button>
@@ -239,7 +240,7 @@ export function Admin() {
         {/* Аналитика — заглушка */}
         <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
           <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="text-2xl mb-3">📊</div>
+          <div className="dark:text-white/70 text-gray-600 mb-3"><BarChart2 size={22} strokeWidth={1.5} /></div>
           <div className="font-bold dark:text-white text-gray-900 text-sm">Аналитика</div>
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Статистика и графики</div>
         </div>
@@ -247,7 +248,7 @@ export function Admin() {
         {/* База клиентов — заглушка */}
         <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
           <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="text-2xl mb-3">👥</div>
+          <div className="dark:text-white/70 text-gray-600 mb-3"><Headphones size={22} strokeWidth={1.5} /></div>
           <div className="font-bold dark:text-white text-gray-900 text-sm">База клиентов</div>
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Все пользователи</div>
         </div>
@@ -255,7 +256,7 @@ export function Admin() {
         {/* Рассылки — заглушка */}
         <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
           <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="text-2xl mb-3">📣</div>
+          <div className="dark:text-white/70 text-gray-600 mb-3"><Radio size={22} strokeWidth={1.5} /></div>
           <div className="font-bold dark:text-white text-gray-900 text-sm">Рассылки</div>
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Сообщения всем клиентам</div>
         </div>
@@ -263,7 +264,7 @@ export function Admin() {
         {/* Акции — заглушка */}
         <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
           <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="text-2xl mb-3">🎁</div>
+          <div className="dark:text-white/70 text-gray-600 mb-3"><Zap size={22} strokeWidth={1.5} /></div>
           <div className="font-bold dark:text-white text-gray-900 text-sm">Акции</div>
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Скидки и спецпредложения</div>
         </div>
@@ -271,7 +272,7 @@ export function Admin() {
         {/* Прогрев — заглушка */}
         <div className="relative p-5 rounded-3xl dark:bg-white/5 bg-black/5 text-left opacity-60">
           <span className="absolute top-3 right-3 text-[9px] px-1.5 py-0.5 rounded-full dark:bg-white/10 bg-black/10 dark:text-white/40 text-gray-400">Скоро</span>
-          <div className="text-2xl mb-3">🔥</div>
+          <div className="dark:text-white/70 text-gray-600 mb-3"><Flame size={22} strokeWidth={1.5} /></div>
           <div className="font-bold dark:text-white text-gray-900 text-sm">Прогрев</div>
           <div className="text-xs dark:text-white/40 text-gray-400 mt-0.5">Авто-напоминания клиентам</div>
         </div>

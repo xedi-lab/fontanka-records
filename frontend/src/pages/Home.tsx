@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../hooks/useTelegram'
 import { STUDIOS } from '../data'
+import { Compass, Moon, Zap, Mic2 } from 'lucide-react'
 
 export function Home() {
   const { user, haptic } = useTelegram()
@@ -156,14 +157,14 @@ export function Home() {
           </h3>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { emoji: '📍', title: 'Адрес', sub: 'Гороховая 70' },
-              { emoji: '🕐', title: 'Режим работы', sub: '0:00 — 24:00' },
-              { emoji: '💳', title: 'Предоплата', sub: '50% при записи' },
-              { emoji: '🎛️', title: '3 студии', sub: 'A, B, C на выбор' },
-            ].map(({ emoji, title, sub }) => (
+              { icon: <Compass size={18} strokeWidth={1.5} />, title: 'Адрес', sub: 'Гороховая 70' },
+              { icon: <Moon size={18} strokeWidth={1.5} />, title: 'Режим работы', sub: '0:00 — 24:00' },
+              { icon: <Zap size={18} strokeWidth={1.5} />, title: 'Предоплата', sub: '50% при записи' },
+              { icon: <Mic2 size={18} strokeWidth={1.5} />, title: '3 студии', sub: 'A, B, C на выбор' },
+            ].map(({ icon, title, sub }) => (
               <div key={title}
                 className="p-3.5 rounded-2xl dark:bg-white/5 bg-black/5 border border-white/5">
-                <div className="text-xl mb-1.5">{emoji}</div>
+                <div className="dark:text-white/70 text-gray-600 mb-2">{icon}</div>
                 <div className="text-xs font-semibold dark:text-white text-gray-900">{title}</div>
                 <div className="text-xs dark:text-white/40 text-gray-500 mt-0.5">{sub}</div>
               </div>
