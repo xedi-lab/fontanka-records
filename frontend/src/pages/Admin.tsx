@@ -94,68 +94,74 @@ export function Admin() {
 
   if (view === 'pin') {
     return (
-      <div
-        className="fixed inset-0 bg-[#0d0d0d] flex flex-col overflow-hidden z-[100]"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
-      >
+      <div className="pb-nav flex flex-col" style={{ minHeight: '100svh' }}>
         {/* Close */}
-        <button onClick={() => { setView('dashboard'); setPin('') }}
-          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/40 z-10">
-          <X size={15} />
-        </button>
+        <div className="flex justify-end px-4 pt-5">
+          <button onClick={() => { setView('dashboard'); setPin('') }}
+            className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/40">
+            <X size={16} />
+          </button>
+        </div>
 
-        {/* Top: logo + text */}
-        <div className="flex flex-col items-center justify-center flex-1 gap-1">
-          <div className="relative mb-3">
+        {/* Logo + text */}
+        <div className="flex flex-col items-center justify-center flex-1 gap-1 py-8">
+          <div className="relative mb-4">
             <img src="/assets/logo.jpg" alt="logo"
-              className="w-16 h-16 rounded-full object-cover"
-              style={{ boxShadow: '0 0 30px rgba(255,255,255,0.12)' }} />
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#0d0d0d] flex items-center justify-center">
-              <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center">
-                <Lock size={8} className="text-white/50" />
+              className="w-20 h-20 rounded-full object-cover"
+              style={{ boxShadow: '0 0 40px rgba(255,255,255,0.15)' }} />
+            <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#0d0d0d] flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
+                <Lock size={10} className="text-white/50" />
               </div>
             </div>
           </div>
 
-          <h2 className="text-white text-lg font-black tracking-widest uppercase">Фонтанка Рэкордс</h2>
-          <p className="text-[10px] text-white/40 tracking-[0.25em] uppercase">Режим владельца</p>
+          <h2 className="text-white text-xl font-black tracking-widest uppercase">Фонтанка Рэкордс</h2>
+          <p className="text-xs text-white/40 tracking-widest uppercase mt-1">Режим владельца</p>
 
           {/* Dots */}
-          <div className="flex gap-4 mt-6 mb-1">
+          <div className="flex gap-5 mt-8 mb-2">
             {[0,1,2,3].map(i => (
               <div key={i} className={`rounded-full transition-all duration-150 ${
                 pin.length > i
-                  ? pinError
-                    ? 'w-3.5 h-3.5 bg-red-400'
-                    : 'w-3.5 h-3.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.6)]'
-                  : 'w-3 h-3 bg-white/15'
+                  ? pinError ? 'w-4 h-4 bg-red-400' : 'w-4 h-4 bg-white'
+                  : 'w-3.5 h-3.5 bg-white/20'
               }`} />
             ))}
           </div>
 
-          <div className="h-5 flex items-center">
-            {pinError && <p className="text-red-400 text-xs tracking-wide">Неверный PIN</p>}
-            {pinLoading && <p className="text-white/30 text-xs">Проверяем...</p>}
+          <div className="h-6 flex items-center">
+            {pinError && <p className="text-red-400 text-sm">Неверный PIN</p>}
+            {pinLoading && <p className="text-white/40 text-sm">Проверяем...</p>}
           </div>
         </div>
 
         {/* Numpad */}
-        <div className="grid grid-cols-3 gap-2.5 px-8 pb-4">
+        <div className="grid grid-cols-3 px-6 pb-6" style={{ gap: '8px' }}>
           {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
             d === '' ? <div key={i} /> :
             <button
               key={i}
               disabled={pinLoading}
               onClick={() => d === '⌫' ? setPin(p => p.slice(0, -1)) : handlePinDigit(d)}
-              className={`h-14 rounded-2xl font-semibold transition-all active:scale-95 active:bg-white/10 disabled:opacity-40
-                ${d === '⌫' ? 'text-white/40 text-lg' : 'text-white text-2xl'}`}
+              style={{
+                height: 64,
+                borderRadius: 16,
+                background: 'rgba(255,255,255,0.06)',
+                color: d === '⌫' ? 'rgba(255,255,255,0.4)' : 'white',
+                fontSize: d === '⌫' ? 20 : 26,
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                opacity: pinLoading ? 0.4 : 1,
+              }}
             >
               {d}
             </button>
           ))}
         </div>
 
-        <p className="text-white/15 text-[9px] tracking-[0.3em] uppercase text-center pb-2">
+        <p className="text-white/20 text-xs text-center pb-4">
           Гороховая 70 · Санкт-Петербург
         </p>
       </div>
