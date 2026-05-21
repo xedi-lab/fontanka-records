@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Mic2, Sliders, Wind, Key, Package } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { format, addDays, isSameDay } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -168,7 +169,13 @@ export function Booking() {
                     ? 'bg-white text-black'
                     : 'dark:bg-white/10 bg-black/10 dark:text-white/70 text-gray-600'}`}
               >
-                <span>{cat.icon}</span>
+                <span className="flex items-center">
+                  {cat.id === 'record'  && <Mic2 size={14} strokeWidth={2} />}
+                  {cat.id === 'studio'  && <Sliders size={14} strokeWidth={2} />}
+                  {cat.id === 'voice'   && <Wind size={14} strokeWidth={2} />}
+                  {cat.id === 'rent'    && <Key size={14} strokeWidth={2} />}
+                  {cat.id === 'package' && <Package size={14} strokeWidth={2} />}
+                </span>
                 <span>{cat.label}</span>
               </button>
             ))}
