@@ -174,8 +174,8 @@ export function Admin() {
                 style={{
                   height: 68,
                   borderRadius: 18,
-                  background: isBackspace ? 'transparent' : 'rgba(255,255,255,0.06)',
-                  border: isBackspace ? 'none' : '1px solid rgba(255,255,255,0.07)',
+                  background: 'transparent',
+                  border: 'none',
                   color: isBackspace ? 'rgba(255,255,255,0.35)' : 'white',
                   fontSize: isBackspace ? 22 : 28,
                   fontWeight: isBackspace ? 400 : 300,
@@ -185,7 +185,7 @@ export function Admin() {
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   transition: 'all 0.1s ease',
-                  boxShadow: isBackspace ? 'none' : 'inset 0 1px 0 rgba(255,255,255,0.05)',
+                  boxShadow: 'none',
                 }}
               >
                 {d}
