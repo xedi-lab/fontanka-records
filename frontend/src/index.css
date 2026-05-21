@@ -104,5 +104,27 @@ img {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 4s linear infinite;
+  animation: shimmer 8s linear infinite;
+}
+
+@keyframes diamond-flash {
+  0%, 60% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1.4) rotate(20deg); }
+  80% { opacity: 0.9; transform: translate(-50%, -50%) scale(1) rotate(45deg); }
+  95% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(90deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(90deg); }
+}
+
+.diamond-glint {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  font-size: 0.6em;
+  color: white;
+  -webkit-text-fill-color: white;
+  opacity: 0;
+  animation: diamond-flash 8s ease-in-out infinite;
+  animation-delay: 4s;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,1)) drop-shadow(0 0 8px rgba(255,255,255,0.8));
 }

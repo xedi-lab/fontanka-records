@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTelegram } from '../hooks/useTelegram'
 import { STUDIOS } from '../data'
-import { LogoCanvas } from '../components/LogoCanvas'
 
 export function Home() {
   const { user, haptic } = useTelegram()
@@ -49,13 +48,18 @@ export function Home() {
             style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)' }} />
         </div>
 
-        {/* Logo — 3D floating + glowing */}
+        {/* Logo — floating + glowing */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6">
-          <div className="mb-2 -mt-4">
-            <LogoCanvas />
+          <div className="logo-float mb-4">
+            <img
+              src="/assets/logo.jpg"
+              alt="Фонтанка Рэкордс"
+              className="w-24 h-24 rounded-full object-cover"
+              style={{ boxShadow: '0 0 40px rgba(255,255,255,0.3), 0 0 80px rgba(255,255,255,0.1)' }}
+            />
           </div>
           <h1 className="text-shimmer text-2xl font-black tracking-widest uppercase text-center">
-            Фонтанка Рэкордс
+            Фонтанка Рэ<span className="relative">кордс<span className="diamond-glint">✦</span></span>
           </h1>
           <p className="text-white/50 text-xs tracking-[0.2em] uppercase mt-1 text-center">
             Гороховая 70 · Санкт-Петербург
