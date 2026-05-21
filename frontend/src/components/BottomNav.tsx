@@ -12,10 +12,7 @@ const baseTabs = [
 export function BottomNav() {
   const { isAdmin, pendingCount } = useAppContext()
   const tabs = isAdmin
-    ? [
-        ...baseTabs.filter(t => t.to !== '/studios'),
-        { to: '/admin', icon: AdminIcon, label: 'Админ' },
-      ]
+    ? [...baseTabs, { to: '/admin', icon: AdminIcon, label: 'Админ' }]
     : baseTabs
 
   return (

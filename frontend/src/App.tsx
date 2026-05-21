@@ -21,27 +21,15 @@ interface AppCtx {
   isAdmin: boolean
   pendingCount: number
   refreshPending: () => void
-  theme: 'light' | 'dark'
-  setThemeOverride: (t: 'light' | 'dark') => void
 }
 
-const AppContext = createContext<AppCtx>({ telegramId: null, isAdmin: false, pendingCount: 0, refreshPending: () => {}, theme: 'dark', setThemeOverride: () => {} })
+const AppContext = createContext<AppCtx>({ telegramId: null, isAdmin: false, pendingCount: 0, refreshPending: () => {} })
 export const useAppContext = () => useContext(AppContext)
 
 export function App() {
-  const { theme: tgTheme, user } = useTelegram()
+  const { user } = useTelegram()
   const [telegramId, setTelegramId] = useState<number | null>(null)
   const [pendingCount, setPendingCount] = useState(0)
-  const [themeOverride, setThemeOverrideState] = useState<'light' | 'dark' | null>(
-    () => (localStorage.getItem('themeOverride') as 'light' | 'dark' | null)
-  )
-
-  const theme = themeOverride ?? tgTheme
-
-  const setThemeOverride = (t: 'light' | 'dark') => {
-    localStorage.setItem('themeOverride', t)
-    setThemeOverrideState(t)
-  }
 
   const isAdmin = telegramId !== null && ADMIN_IDS.includes(telegramId)
 
@@ -53,10 +41,8 @@ export function App() {
   }
 
   useEffect(() => {
-    const root = document.documentElement
-    if (theme === 'dark') root.classList.add('dark')
-    else root.classList.remove('dark')
-  }, [theme])
+    document.documentElement.classList.add('dark')
+  }, [])
 
   useEffect(() => {
     if (!user) return
@@ -75,7 +61,7 @@ export function App() {
   }, [isAdmin])
 
   return (
-    <AppContext.Provider value={{ telegramId, isAdmin, pendingCount, refreshPending, theme, setThemeOverride }}>
+    <AppContext.Provider value={{ telegramId, isAdmin, pendingCount, refreshPending }}>
       <div className="min-h-screen dark:bg-[#0d0d0d] bg-[#f5f5f5] dark:text-white text-gray-900 transition-colors">
         <Routes>
           <Route path="/" element={<Home />} />
