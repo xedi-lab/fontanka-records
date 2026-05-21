@@ -133,8 +133,7 @@ export function Home() {
                   <div className="text-xs dark:text-white/50 text-gray-500 mt-0.5 truncate">{studio.tagline}</div>
                   <div className="flex flex-wrap gap-1 mt-1.5">
                     {studio.features.slice(0, 2).map(f => (
-                      <span key={f} className="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                        style={{ backgroundColor: studio.color + '22', color: studio.color }}>
+                      <span key={f} className="text-[10px] px-2 py-0.5 rounded-full font-medium dark:bg-white/10 bg-black/8 dark:text-white/70 text-gray-600">
                         {f}
                       </span>
                     ))}

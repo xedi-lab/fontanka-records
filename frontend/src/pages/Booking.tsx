@@ -208,7 +208,7 @@ export function Booking() {
               key={studio.id}
               onClick={() => { haptic?.selectionChanged(); store.setStudio(studio.id as StudioId) }}
               className="w-full text-left rounded-2xl overflow-hidden transition-all active:scale-[0.98]"
-              style={store.selectedStudio === studio.id ? { boxShadow: `0 0 0 2px ${studio.color}` } : {}}
+              style={store.selectedStudio === studio.id ? { boxShadow: '0 0 0 2px rgba(255,255,255,0.8)' } : {}}
             >
               <div className={`rounded-2xl overflow-hidden dark:bg-white/5 bg-black/5`}>
                 <div className="relative h-32">
@@ -219,9 +219,8 @@ export function Booking() {
                     <div className="text-white/70 text-xs">{studio.tagline}</div>
                   </div>
                   {store.selectedStudio === studio.id && (
-                    <div className="absolute right-4 top-4 w-6 h-6 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: studio.color }}>
-                      <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                    <div className="absolute right-4 top-4 w-6 h-6 rounded-full bg-white flex items-center justify-center">
+                      <svg className="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>

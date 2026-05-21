@@ -94,8 +94,7 @@ export function Studios() {
                     <div className="text-white font-bold text-lg leading-tight">{studio.name}</div>
                     <div className="text-white/70 text-sm">{studio.tagline}</div>
                   </div>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: studio.color + '33', border: `1px solid ${studio.color}55` }}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center bg-white/15 border border-white/25">
                     <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 18l6-6-6-6" />
                     </svg>
@@ -106,8 +105,7 @@ export function Studios() {
             <div className="p-4">
               <div className="flex flex-wrap gap-1.5">
                 {studio.features.map(f => (
-                  <span key={f} className="text-xs px-2.5 py-1 rounded-full font-medium"
-                    style={{ backgroundColor: studio.color + '18', color: studio.color }}>
+                  <span key={f} className="text-xs px-2.5 py-1 rounded-full font-medium bg-white/10 text-white/70 border border-white/10">
                     {f}
                   </span>
                 ))}
