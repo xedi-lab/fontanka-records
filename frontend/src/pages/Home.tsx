@@ -58,9 +58,12 @@ export function Home() {
               style={{ boxShadow: '0 0 40px rgba(255,255,255,0.3), 0 0 80px rgba(255,255,255,0.1)' }}
             />
           </div>
-          <h1 className="text-shimmer text-2xl font-black tracking-widest uppercase text-center">
-            Фонтанка Рэ<span className="relative">кордс<span className="diamond-glint">✦</span></span>
-          </h1>
+          <div className="relative">
+            <h1 className="text-shimmer text-2xl font-black tracking-widest uppercase text-center">
+              Фонтанка Рэкордс
+            </h1>
+            <span className="diamond-glint">✦</span>
+          </div>
           <p className="text-white/50 text-xs tracking-[0.2em] uppercase mt-1 text-center">
             Гороховая 70 · Санкт-Петербург
           </p>
