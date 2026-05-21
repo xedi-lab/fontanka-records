@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format, addDays, isSameDay } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -130,21 +130,7 @@ export function Booking() {
   }
 
   if (success) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center animate-scale-in">
-        <div className="text-6xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold dark:text-white text-gray-900 mb-2">Запись создана!</h2>
-        <p className="text-sm dark:text-white/50 text-gray-500 mb-8">
-          Ждём тебя в студии. Напомним за день до сессии.
-        </p>
-        <button
-          onClick={() => { setSuccess(false); setStep('service'); navigate('/profile') }}
-          className="w-full max-w-xs py-4 rounded-2xl font-bold text-black bg-white active:scale-95 transition-transform shadow-lg shadow-white/20"
-        >
-          Мои записи
-        </button>
-      </div>
-    )
+    return <SuccessScreen onDone={() => { setSuccess(false); setStep('service'); navigate('/profile') }} onHome={() => { setSuccess(false); setStep('service'); navigate('/') }} />
   }
 
   return (
@@ -402,6 +388,61 @@ function ConfirmRow({ label, value, bold, accent }: { label: string; value: stri
       <span className={`text-sm ${bold ? 'font-bold dark:text-white text-gray-900' : accent ? 'font-semibold dark:text-white text-gray-900' : 'dark:text-white text-gray-900'}`}>
         {value}
       </span>
+    </div>
+  )
+}
+
+function SuccessScreen({ onDone, onHome }: { onDone: () => void; onHome: () => void }) {
+  const ringRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      ringRef.current?.classList.add('success-ring-animate')
+    }, 100)
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center animate-fade-in">
+      {/* Glow ring + check */}
+      <div className="relative mb-8">
+        <div ref={ringRef} className="success-ring w-28 h-28 rounded-full border-2 border-white/20 flex items-center justify-center">
+          <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center"
+            style={{ boxShadow: '0 0 40px rgba(255,255,255,0.15), 0 0 80px rgba(255,255,255,0.08)' }}>
+            <svg className="w-9 h-9 text-white success-check" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+        {/* Orbiting dot */}
+        <div className="absolute inset-0 success-orbit">
+          <div className="w-2 h-2 rounded-full bg-white absolute -top-1 left-1/2 -translate-x-1/2"
+            style={{ boxShadow: '0 0 8px rgba(255,255,255,0.8)' }} />
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-black dark:text-white text-gray-900 mb-2 tracking-tight">
+        Запись создана
+      </h2>
+      <p className="text-sm dark:text-white/50 text-gray-500 mb-10 max-w-xs">
+        Мы уже знаем о тебе. Напомним за день до сессии — просто приходи и твори.
+      </p>
+
+      <div className="w-full max-w-xs space-y-3">
+        <button
+          onClick={onDone}
+          className="w-full py-4 rounded-2xl font-bold text-black bg-white active:scale-95 transition-transform"
+          style={{ boxShadow: '0 0 30px rgba(255,255,255,0.2)' }}
+        >
+          Мои записи
+        </button>
+        <button
+          onClick={onHome}
+          className="w-full py-3.5 rounded-2xl font-medium dark:text-white/60 text-gray-500 dark:bg-white/5 bg-black/5 active:scale-95 transition-transform"
+        >
+          На главную
+        </button>
+      </div>
     </div>
   )
 }
